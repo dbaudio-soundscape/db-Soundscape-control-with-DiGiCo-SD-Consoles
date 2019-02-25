@@ -1,30 +1,39 @@
-# Support for integration of DiGiCo Generic OSC
+# d&b Soundscape control with DiGiCo SD Consoles - Generic OSC 
 
-Copyright (C) 2017-2019, d&b audiotechnik GmbH
+## Workstream for DiGiCo SD-consoles to control soundscape 
+from the console surface and the console scene momory
+realized with the DiGiCo Generic OSC feature and the d&b Software bridge. 
 
-## What is integration of DiGiCo Generic OSC in d&b soundscape
+DiGiCo Generic OSC feature can be used to control d&b Soundscape parameters in the DS100 from the console surface. In addition, d&b provides the free“RemoteProtocolbridge” which enables bidirectional communication and adjusts the parameter values between consoles and the DS100 in both directions. 
 
-d&b soundscape console integration for DiGiCo consoles can be realized with the DiGiCo Generic OSC feature and the d&b software bridge "RemoteProtocolBridge". 
+More information about the Generic OSC feature is provided on the website or from the DiGiCo Support team. 
 
-A detailed description of the d&b soundscape system, and documentation of the functions, features and configuration options can be found in the "TI 501d&b Soundscape System design and operation" which you can download from the d&b Homepage: www.dbaudio.com
+For more information about the d&b Soundscape system, go to www.dbaudio.com and www.dbsoundscape.com. 
 
-The DiGiCo´s Generic OSC feature enables DiGiCo SD consoles to remote control other devices via OSC from a control panel added to each input channel on the console surface.
-This feature of the DiGiCo consoles, stand alone, can be used to control d&b soundscape parameters within the DS100 from the console surface. 
 
-In addition, d&b provides the free software tool “RemoteProtocolBridge” for macOS and Windows that enables bidirectional communication and adjusts the parameter values between consoles and the DS100 in both directions. This ensures that the console always displays the actual status of the DS100, even if parameters on the DS100 got changed by other tools, such as the d&b R1 Remote control software, cause the software bridge will transfer this parameter changes to the console surface.
+## Features 
 
-For more Infos about the d&b Soundscape System and Concept visit: 
-www.dbaudio.com and www.dbsoundscape.com.
+Control of d&b Soundscape parameters of the sound objects 1-64 from the channel strip 1-64 of the console and store / recall them using the scene memory of the console. 
 
-## Requirements for usage of d&b software bridge
+Controllable Soundscape Parameters: 
 
-The d&b software bridge tool "RemoteProtocolBridge" is available for both Windows and macOS operating systems as compiled binaries in this repository under Binary/Windows and Binary/MacOS.
+En-Scene object parameters: 
+-	X position 
+-	Y position 
+-	SPREAD
+-	Delay mode 
+En-Space object parameters: 
+-	Reverb send level 
 
-### macOS
 
-The archived *.app bundle can be extracted and executed on a macOS system. The user has to enforce opening of the app initially in SystemSettings->Security to bypass SafeGuard restrictions.
 
-### Windows
+## Requirements
 
-The archived *.exe executable can be extracted and executed on a Windows system. It requires the MS VisualStudio runtime environment to be installed on the system.
-The Visual C++ Redistributable Packages for Visual Studio 2013 can be downloaded from Microsoft website. For this see https://www.microsoft.com/en-US/download/details.aspx?id=40784
+-	any DiGiCo SD Console with enabled Generic OSC
+-	d&b DS100 Signal Engine with active En-Scene and / or En-Space license. 
+-	Console and DS Signal Engine connected to the same Ethernet network (to establish OSC communication). 
+
+-	For bidirectional communication / workflow: Win or macOS PC running the d&b Software bridge. The PC must be connected to the same network.
+On Windows OS, the d&b Software bridge “RemoteProtocolbridge” requires installing the Visual C++ Redistributable Packages for Visual Studio 2013. For further details, see https://www.microsoft.com/en- US/download/details.aspx?id=40784. 
+
+-	A specific function description of the d&b Soundscape system, the functions, features and configuration options can be found in the "TI 501d&b Soundscape System design and operation" which is available for download from the d&b website at www.dbaudio.com. 
