@@ -19,7 +19,9 @@ Copyright (C) 2017-2019, d&b audiotechnik GmbH
 
 ### Known issues
 
-* Parameter DelayMode cannot be changed with a knob on the console interface: - DelayMode is received correctly when changed via R1 (and can also be saved and recalled via the scene memory) - can only not be changed via an assigned knob on the console. 
+* Parameter DelayMode cannot be changed with a knob on the console interface: 
+- DelayMode is received correctly when changed via R1 (and can also be saved and recalled via the scene memory) 
+- only can not be changed via an assigned knob on the console. 
 
 
 ## V0.3.0
