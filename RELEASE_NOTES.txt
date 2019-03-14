@@ -27,3 +27,4 @@ Copyright (C) 2017-2019, d&b audiotechnik GmbH
 ## V0.3.0
 
 * Initial release
+* release "Guide" is based on
