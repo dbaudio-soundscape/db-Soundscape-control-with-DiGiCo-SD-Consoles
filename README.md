@@ -1,5 +1,7 @@
 # d&b Soundscape control with DiGiCo SD Consoles - Generic OSC 
 
+By downloading software from this site, you agree to the terms and conditions described in the End-User License Agreement (provided with EULA.txt). If you do not agree with such terms and conditions do not download the software.
+
 ## Workstream for DiGiCo SD-consoles to control d&b Soundscape from the console surface and the console scene memory realized with the DiGiCo Generic OSC feature and the d&b Software bridge. 
 
 DiGiCo Generic OSC feature can be used to control d&b Soundscape parameters in the DS100 from the console surface. In addition, d&b provides the free “RemoteProtocolbridge” which enables bidirectional communication and adjusts the parameter values between consoles and the DS100 in both directions. 
