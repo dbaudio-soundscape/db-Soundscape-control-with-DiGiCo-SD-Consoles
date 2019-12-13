@@ -1,0 +1,55 @@
+# Project specific exclude paths
+Tools/RemoteProtocolBridge/JuceLibraryCode/
+Tools/RemoteProtocolBridge/Builds/
+
+# Custom exclude exts
+*.svn/
+*.log
+*.tlog
+*.lib
+*.obj
+*.lastbuildstate
+*.pdb
+*.idb
+*.res
+*.user
+*.pch
+*.sdf
+*.opensdf
+*.ipch
+*.suo
+BuildLog.htm
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+

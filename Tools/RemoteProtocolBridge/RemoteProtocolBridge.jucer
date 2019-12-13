@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT name="RemoteProtocolBridge" projectType="guiapp" jucerVersion="5.4.5"
+              companyName="d&amp;b audiotechnik GmbH &amp; Co. KG" companyWebsite="www.dbaudio.com"
+              companyEmail="support@dbaudio.com" version="0.4.1" bundleIdentifier="com.dbaudio.RemoteProtocolBridge"
+              companyCopyright="Copyright (c) by d&amp;b audiotechnik GmbH &amp; Co. KG; all rights reserved."
+              id="BLZw0l">
+  <MAINGROUP id="NrfEgH" name="RemoteProtocolBridge">
+    <GROUP id="{B33DB198-B9AF-C448-4DF9-16BC6A86A485}" name="Resources">
+      <GROUP id="{437F65E3-25E5-CA42-F0DF-11A45E5336F3}" name="Images">
+        <FILE id="dgmCAO" name="AddDownImage.png" compile="1" resource="1"
+              file="Resources/Images/AddDownImage.png"/>
+        <FILE id="uq1FrL" name="AddNormalImage.png" compile="1" resource="1"
+              file="Resources/Images/AddNormalImage.png"/>
+        <FILE id="HhRR68" name="AddOverImage.png" compile="1" resource="1"
+              file="Resources/Images/AddOverImage.png"/>
+        <FILE id="cuye92" name="Bridge.png" compile="1" resource="1" file="Resources/Images/Bridge.png"/>
+        <FILE id="oc4ptZ" name="Bridge_mobile.png" compile="0" resource="1"
+              file="Resources/Images/Bridge_mobile.png"/>
+        <FILE id="Jn0X6m" name="RemoveDownImage.png" compile="1" resource="1"
+              file="Resources/Images/RemoveDownImage.png"/>
+        <FILE id="EGFh7M" name="RemoveNormalImage.png" compile="1" resource="1"
+              file="Resources/Images/RemoveNormalImage.png"/>
+        <FILE id="GJdn4l" name="RemoveOverImage.png" compile="1" resource="1"
+              file="Resources/Images/RemoveOverImage.png"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{E069763D-4E14-E9FB-F357-D6342F29EDAC}" name="Source">
+      <FILE id="mNcy4m" name="LoggingTarget_Interface.h" compile="0" resource="0"
+            file="Source/LoggingTarget_Interface.h"/>
+      <GROUP id="{F2DC2EF3-9D3E-0654-9E7B-A7CE9783629A}" name="ConfigComponents">
+        <FILE id="KILGNd" name="GlobalConfigComponents.cpp" compile="1" resource="0"
+              file="Source/ConfigComponents/GlobalConfigComponents.cpp"/>
+        <FILE id="JJGwmj" name="GlobalConfigComponents.h" compile="0" resource="0"
+              file="Source/ConfigComponents/GlobalConfigComponents.h"/>
+        <FILE id="XLjQCL" name="ObjectHandlingConfigComponents.cpp" compile="1"
+              resource="0" file="Source/ConfigComponents/ObjectHandlingConfigComponents.cpp"/>
+        <FILE id="P2Pfzw" name="ObjectHandlingConfigComponents.h" compile="0"
+              resource="0" file="Source/ConfigComponents/ObjectHandlingConfigComponents.h"/>
+        <FILE id="Hk8e13" name="ProtocolConfigComponents.cpp" compile="1" resource="0"
+              file="Source/ConfigComponents/ProtocolConfigComponents.cpp"/>
+        <FILE id="jEOCAK" name="ProtocolConfigComponents.h" compile="0" resource="0"
+              file="Source/ConfigComponents/ProtocolConfigComponents.h"/>
+      </GROUP>
+      <FILE id="l2DOl6" name="ProtocolComponent.cpp" compile="1" resource="0"
+            file="Source/ProtocolComponent.cpp"/>
+      <FILE id="Z36fh9" name="ProtocolComponent.h" compile="0" resource="0"
+            file="Source/ProtocolComponent.h"/>
+      <FILE id="cmyGzp" name="LoggingWindow.cpp" compile="1" resource="0"
+            file="Source/LoggingWindow.cpp"/>
+      <FILE id="I0koeA" name="LoggingWindow.h" compile="0" resource="0" file="Source/LoggingWindow.h"/>
+      <FILE id="B4PNx6" name="Common.h" compile="0" resource="0" file="Source/Common.h"/>
+      <FILE id="yV7j3T" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="sir73h" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="GAjmA8" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="eXtasA" name="NodeComponent.h" compile="0" resource="0" file="Source/NodeComponent.h"/>
+      <FILE id="Mx56NT" name="NodeComponent.cpp" compile="1" resource="0"
+            file="Source/NodeComponent.cpp"/>
+      <GROUP id="{21D03558-5B35-43A3-EDDF-110D5D5BEA11}" name="ProcessingEngine">
+        <GROUP id="{1CFE45D1-7AB1-8FCF-4FE5-E6F480143593}" name="ProtocolProcessor">
+          <GROUP id="{5A5CDBD3-69D7-2E47-07E4-0180F216CF58}" name="MIDIProtocolProcessor">
+            <FILE id="gIDS81" name="MIDIProtocolProcessor.cpp" compile="1" resource="0"
+                  file="Source/ProtocolProcessor/MIDIProtocolProcessor/MIDIProtocolProcessor.cpp"/>
+            <FILE id="bHbfgB" name="MIDIProtocolProcessor.h" compile="0" resource="0"
+                  file="Source/ProtocolProcessor/MIDIProtocolProcessor/MIDIProtocolProcessor.h"/>
+          </GROUP>
+          <GROUP id="{40B16987-AD8B-2FB0-EE39-116DBF8743B3}" name="OCAProtocolProcessor">
+            <FILE id="cEDhbg" name="OCAProtocolProcessor.cpp" compile="1" resource="0"
+                  file="Source/ProtocolProcessor/OCAProtocolProcessor/OCAProtocolProcessor.cpp"/>
+            <FILE id="lxwgOk" name="OCAProtocolProcessor.h" compile="0" resource="0"
+                  file="Source/ProtocolProcessor/OCAProtocolProcessor/OCAProtocolProcessor.h"/>
+          </GROUP>
+          <GROUP id="{4B0E7F91-CDF1-3163-F013-2C232E5A93A7}" name="OSCProtocolProcessor">
+            <FILE id="NAOvHn" name="OSCProtocolProcessor.cpp" compile="1" resource="0"
+                  file="Source/ProtocolProcessor/OSCProtocolProcessor/OSCProtocolProcessor.cpp"/>
+            <FILE id="uDFCYh" name="OSCProtocolProcessor.h" compile="0" resource="0"
+                  file="Source/ProtocolProcessor/OSCProtocolProcessor/OSCProtocolProcessor.h"/>
+            <FILE id="hzxZPQ" name="SenderAwareOSCReceiver.cpp" compile="1" resource="0"
+                  file="Source/ProtocolProcessor/OSCProtocolProcessor/SenderAwareOSCReceiver.cpp"/>
+            <FILE id="YsWxsb" name="SenderAwareOSCReceiver.h" compile="0" resource="0"
+                  file="Source/ProtocolProcessor/OSCProtocolProcessor/SenderAwareOSCReceiver.h"/>
+          </GROUP>
+          <FILE id="lBXNSV" name="ProtocolProcessor_Abstract.cpp" compile="1"
+                resource="0" file="Source/ProtocolProcessor/ProtocolProcessor_Abstract.cpp"/>
+          <FILE id="F3f0ob" name="ProtocolProcessor_Abstract.h" compile="0" resource="0"
+                file="Source/ProtocolProcessor/ProtocolProcessor_Abstract.h"/>
+        </GROUP>
+        <FILE id="qhsKyD" name="ObjectDataHandling.cpp" compile="1" resource="0"
+              file="Source/ObjectDataHandling.cpp"/>
+        <FILE id="FOVx6O" name="ObjectDataHandling.h" compile="0" resource="0"
+              file="Source/ObjectDataHandling.h"/>
+        <FILE id="sTXygF" name="ProcessingEngine.cpp" compile="1" resource="0"
+              file="Source/ProcessingEngine.cpp"/>
+        <FILE id="Lagxea" name="ProcessingEngine.h" compile="0" resource="0"
+              file="Source/ProcessingEngine.h"/>
+        <FILE id="IYGos1" name="ProcessingEngineConfig.cpp" compile="1" resource="0"
+              file="Source/ProcessingEngineConfig.cpp"/>
+        <FILE id="SZU8sr" name="ProcessingEngineConfig.h" compile="0" resource="0"
+              file="Source/ProcessingEngineConfig.h"/>
+        <FILE id="hVtkwL" name="ProcessingEngineNode.cpp" compile="1" resource="0"
+              file="Source/ProcessingEngineNode.cpp"/>
+        <FILE id="u33pKd" name="ProcessingEngineNode.h" compile="0" resource="0"
+              file="Source/ProcessingEngineNode.h"/>
+      </GROUP>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" smallIcon="cuye92" bigIcon="cuye92"
+               hardenedRuntime="1" appSandbox="1" appSandboxOptions="com.apple.security.network.client,com.apple.security.network.server">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2017 targetFolder="Builds/VisualStudio2017" smallIcon="cuye92" bigIcon="cuye92"
+            windowsTargetPlatformVersion="10.0.17134.0">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2017>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+    <OSX/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>

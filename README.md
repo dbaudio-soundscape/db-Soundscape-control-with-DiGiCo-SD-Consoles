@@ -35,6 +35,6 @@ En-Space object parameters:
 -	Console and DS Signal Engine connected to the same Ethernet network (to establish OSC communication). 
 
 -	For bidirectional communication / workflow: Win or macOS PC running the d&b Software bridge. The PC must be connected to the same network.
-On Windows OS, the d&b Software bridge “RemoteProtocolbridge” requires installing the Visual C++ Redistributable Packages for Visual Studio 2013. For further details, see https://www.microsoft.com/en- US/download/details.aspx?id=40784. 
+On Windows OS, the d&b Software bridge “RemoteProtocolbridge” requires the Visual C++ Redistributable Packages for Visual Studio 2017.
 
 -	A specific function description of the d&b Soundscape system, the functions, features and configuration options can be found in the "TI 501d&b Soundscape System design and operation" which is available for download from the d&b website at www.dbaudio.com. 
