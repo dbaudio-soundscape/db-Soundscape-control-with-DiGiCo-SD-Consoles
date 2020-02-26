@@ -1,6 +1,12 @@
 # d&b Soundscape control with DiGiCo SD Consoles - Generic OSC 
 
-By downloading software from this site, you agree to the terms and conditions described in the End-User License Agreement (provided with EULA.txt). If you do not agree with such terms and conditions do not download the software.
+Copyright (C) 2017-2020, d&b audiotechnik GmbH & Co. KG
+
+By downloading software from this site, you agree to the terms and conditions described in the [End-User License Agreement](EULA.md). If you do not agree with such terms and conditions do not download the software.
+
+## Latest binaries can be downloaded here: [LATEST RELEASE](../../releases/latest)
+
+---
 
 ## Workstream for DiGiCo SD-consoles to control d&b Soundscape from the console surface and the console scene memory realized with the DiGiCo Generic OSC feature and the d&b Software bridge. 
 
