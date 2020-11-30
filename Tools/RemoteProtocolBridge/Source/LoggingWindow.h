@@ -40,7 +40,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ProcessingEngine.h"
 
 // Fwd. Declarations
-class MainComponent;
+class MainRemoteProtocolBridgeComponent;
 class LoggingWindow;
 
 
@@ -169,13 +169,13 @@ public:
 	void AddLogData(NodeId NId, ProtocolId SenderPId, ProtocolType SenderType, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
 	//==============================================================================
-	void AddListener(MainComponent* listener);
+	void AddListener(MainRemoteProtocolBridgeComponent* listener);
 
 	void closeButtonPressed() override;
 
 private:
 	std::unique_ptr<LoggingComponent>	m_loggingComponent;	/**< Actual logging content component to reside in window. */
-	MainComponent*						m_parentListener;	/**< Parent that needs to be notified when this window self-destroys. */
+	MainRemoteProtocolBridgeComponent*	m_parentListener;	/**< Parent that needs to be notified when this window self-destroys. */
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoggingWindow)
 };

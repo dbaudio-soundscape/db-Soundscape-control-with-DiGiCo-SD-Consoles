@@ -36,7 +36,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "../Common.h"
+#include "../RemoteProtocolBridgeCommon.h"
 #include "../ProcessingEngine.h"
 
 // Fwd. Declarations
@@ -128,6 +128,45 @@ private:
 	std::unique_ptr<TextEditor>	m_CountAEdit;	/**< Headlining Label for channel range edits. */
 	std::unique_ptr<Label>		m_CountBLabel;	/**< Headlining Label for mapping checks. */
 	std::unique_ptr<TextEditor>	m_CountBEdit;	/**< Headlining Label for mapping1 checks. */
+
+};
+
+/**
+ * Class OHForwardOnlyValueChangesConfigComponent is a container used to hold the GUI
+ * specifically used to configure configuration of Forward_only_valueChanges protocol value filter precision.
+ */
+class OHForwardOnlyValueChangesConfigComponent : public ObjectHandlingConfigComponent_Abstract,
+	public ComboBox::Listener
+{
+	enum PrecVal
+	{
+		PV_INVALID,
+		PV_EVEN,	// 1
+		PV_CENTI,	// 0.1
+		PV_MILLI,	// 0.01
+		PV_MICRO,	// 0.001
+	};
+
+public:
+	OHForwardOnlyValueChangesConfigComponent(ObjectHandlingMode mode);
+	~OHForwardOnlyValueChangesConfigComponent();
+
+	//==============================================================================
+	ProcessingEngineConfig::ObjectHandlingData DumpObjectHandlingData() override;
+	void FillObjectHandlingData(const ProcessingEngineConfig::ObjectHandlingData& ohData) override;
+
+	//==============================================================================
+	const std::pair<int, int> GetSuggestedSize() override;
+
+private:
+	virtual void resized() override;
+
+	void comboBoxChanged(ComboBox* comboBox) override;
+
+	static String PrecisionValToString(PrecVal pv);
+
+	std::unique_ptr<Label>		m_PrecisionLabel;	/**< Label for precision values. */
+	std::unique_ptr<ComboBox>	m_PrecisionSelect;	/**< Dropdown for possible precision values. */
 
 };
 

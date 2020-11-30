@@ -34,12 +34,13 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "Common.h"
+#include <JuceHeader.h>
+
+#include "RemoteProtocolBridgeCommon.h"
 #include "ConfigComponents/ObjectHandlingConfigComponents.h"
 
 // Fwd. Declarations
-class MainComponent;
+class MainRemoteProtocolBridgeComponent;
 class ProcessingEngine;
 class ProcessingEngineConfig;
 class ProtocolGroupComponent;
@@ -82,7 +83,7 @@ public:
 	NodeId GetNodeId();
     
     //==============================================================================
-    void AddListener(MainComponent* listener);
+    void AddListener(MainRemoteProtocolBridgeComponent* listener);
 
 private:
     //==============================================================================
@@ -91,7 +92,7 @@ private:
 
     NodeId											m_NodeId;				/**< Id of the node this component manages configuration for. */
     																		
-    MainComponent*									m_parentComponent;		/**< The parent component that needs to be triggered regarding callbacks. */
+	MainRemoteProtocolBridgeComponent*				m_parentComponent;		/**< The parent component that needs to be triggered regarding callbacks. */
 																			
 	std::unique_ptr<ProtocolGroupComponent>			m_protocolsAComponent;	/**< Group component holding the protocol components of type A for this node component. */
 	std::unique_ptr<ProtocolGroupComponent>			m_protocolsBComponent;	/**< Group component holding the protocol components of type B for this node component. */

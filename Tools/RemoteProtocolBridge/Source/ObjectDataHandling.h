@@ -34,9 +34,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "Common.h"
+#include "RemoteProtocolBridgeCommon.h"
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 // Fwd. declarations
 class ProcessingEngineNode;
@@ -71,7 +71,7 @@ protected:
 
 
 /**
- * Class BypassHandling is an class for dummy bypassing message data without modifications.
+ * Class BypassHandling is a class for dummy bypassing message data without modifications.
  */
 class BypassHandling : public ObjectDataHandling_Abstract
 {
@@ -133,5 +133,57 @@ public:
 private:
 	int m_protoChCntA;	/**< Channel count configuration value that is to be expected per protocol type A. */
 	int m_protoChCntB;	/**< Channel count configuration value that is to be expected per protocol type B. */
+
+};
+
+
+/**
+ * Class Forward_only_valueChanges is a class for filtering received value data to only forward changed values.
+ */
+class Forward_only_valueChanges : public ObjectDataHandling_Abstract
+{
+public:
+	Forward_only_valueChanges(ProcessingEngineNode* parentNode);
+	~Forward_only_valueChanges();
+
+	void SetObjectHandlingConfiguration(const ProcessingEngineConfig& config, NodeId NId) override;
+
+	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
+private:
+	bool IsChangedDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData);
+	void SetCurrentDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData);
+	
+	std::map<RemoteObjectIdentifier, std::map<RemoteObjectAddressing, RemoteObjectMessageData>>	m_currentValues;	/**< Hash of current value data to use to compare to incoming data regarding value changes. */
+	double m_precision;																								/**< Value precision to use for processing. */
+};
+
+/**
+ * Class Forward_A_to_B_only is a class for filtering received value data from RoleB protocols to not be forwarded
+ */
+class Forward_A_to_B_only : public ObjectDataHandling_Abstract
+{
+public:
+	Forward_A_to_B_only(ProcessingEngineNode* parentNode);
+	~Forward_A_to_B_only();
+
+	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
+protected:
+
+};
+
+/**
+ * Class Reverse_B_to_A_only is a class for filtering received value data from RoleA protocols to not be forwarded
+ */
+class Reverse_B_to_A_only : public ObjectDataHandling_Abstract
+{
+public:
+	Reverse_B_to_A_only(ProcessingEngineNode* parentNode);
+	~Reverse_B_to_A_only();
+
+	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
+protected:
 
 };

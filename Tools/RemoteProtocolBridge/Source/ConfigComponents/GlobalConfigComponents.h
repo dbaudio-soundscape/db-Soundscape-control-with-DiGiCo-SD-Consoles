@@ -34,13 +34,13 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
-#include "../Common.h"
+#include "../RemoteProtocolBridgeCommon.h"
 #include "../ProcessingEngine.h"
 
 // Fwd. Declarations
-class MainComponent;
+class MainRemoteProtocolBridgeComponent;
 class GlobalConfigWindow;
 
 /**
@@ -108,13 +108,13 @@ public:
 	const std::pair<int, int> GetSuggestedSize();
 
 	//==============================================================================
-	void AddListener(MainComponent* listener);
+	void AddListener(MainRemoteProtocolBridgeComponent* listener);
 
 private:
 	void closeButtonPressed() override;
 
 	std::unique_ptr<GlobalConfigComponent>	m_configComponent;	/**< Actual config content component to reside in window. */
-	MainComponent*							m_parentListener;	/**< Parent that needs to be notified when this window self-destroys. */
+	MainRemoteProtocolBridgeComponent*		m_parentListener;	/**< Parent that needs to be notified when this window self-destroys. */
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GlobalConfigWindow)
 };

@@ -34,10 +34,10 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "../../Common.h"
+#include "../../RemoteProtocolBridgeCommon.h"
 #include "../ProtocolProcessor_Abstract.h"
 
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 
 /**

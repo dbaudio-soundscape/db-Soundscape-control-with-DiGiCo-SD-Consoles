@@ -32,8 +32,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ===============================================================================
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "MainComponent.h"
+#include <JuceHeader.h>
+
+#include "MainRemoteProtocolBridgeComponent.h"
 
 /**
  * Class definition/declaration of RemoteProtocolBridgeApplication is mostly the
@@ -97,7 +98,7 @@ public:
 			: DocumentWindow(name, Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId), DocumentWindow::allButtons)
 		{
 			setUsingNativeTitleBar(true);
-			setContentOwned(new MainComponent(), true);
+			setContentOwned(new MainRemoteProtocolBridgeComponent(), true);
 
 #if JUCE_IOS || JUCE_ANDROID
 			setFullScreen(true);

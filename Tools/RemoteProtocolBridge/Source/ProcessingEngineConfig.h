@@ -34,9 +34,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "Common.h"
+#include "RemoteProtocolBridgeCommon.h"
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 /**
  * Class ProcessingEngineConfig is class for managing application runtime configuration.
@@ -59,6 +59,7 @@ public:
 		int					HostPort;					/**< The tcp/udp port to use as host. */
 		bool				UsesActiveRemoteObjects;    /**< Flag specifying if this protocol is supposed to activly handle specified remote objects. */
 		Array<RemoteObject>	RemoteObjects;				/**< The remote objects actively used by a protocol instance. */
+		int					PollingInterval;			/**< The polling interval in ms. */
 	};
 
 	/**
@@ -69,6 +70,7 @@ public:
 		ObjectHandlingMode	Mode;						/**< The mode the node should operate in to handl msg data (defines what internal handling object is created). */
 		int					ACnt;						/**< Channel count configuration value that is to be expected per protocol type A for object handling module. */
 		int					BCnt;						/**< Channel count configuration value that is to be expected per protocol type B for object handling module. */
+		double				Prec;						/**< Data precision value to be used for evaluation of valu changes of incoming data. */
 	};
 
 	/**
@@ -77,7 +79,7 @@ public:
     struct NodeData
 	{
 		NodeId				Id;							/**< The id of a processing node. */
-		ObjectHandlingData	ObjectHandling;						/**< The mode the node should operate in to handl msg data (defines what internal handling object is created). */
+		ObjectHandlingData	ObjectHandling;				/**< The mode the node should operate in to handl msg data (defines what internal handling object is created). */
 		Array<ProtocolId>	RoleAProtocols;				/**< The role A protocol ids per node. */
 		Array<ProtocolId>	RoleBProtocols;				/**< The role B protocol ids per node. */
 	};
@@ -93,6 +95,8 @@ public:
 	Array<NodeId>		GetNodeIds() const;
 	ObjectHandlingData	GetObjectHandlingData(NodeId NId) const;
 	bool				SetObjectHandlingData(NodeId NId, const ObjectHandlingData& ohData);
+	int					GetPollingInterval(NodeId NId, ProtocolId PId) const;
+	bool				SetPollingInterval(NodeId NId, ProtocolId PId, int interval);
 	ProtocolData		GetProtocolData(NodeId NId, ProtocolId PId) const;
 	bool				SetProtocolData(NodeId NId, ProtocolId PId, const ProtocolData& data);
 	Array<ProtocolId>	GetProtocolAIds(NodeId NId) const;
@@ -111,6 +115,7 @@ public:
     bool				InitConfiguration();
 	bool				ReadConfiguration();
 	bool				ReadActiveObjects(XmlElement* ActiveObjectsElement, Array<RemoteObject>& RemoteObjects);
+	bool				ReadPollingInterval(XmlElement* ActiveObjectsElement, int& PollingInterval);
 	bool				WriteConfiguration();
 	bool				WriteActiveObjects(XmlElement* ActiveObjectsElement, Array<RemoteObject> const& RemoteObjects);
 

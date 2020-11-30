@@ -34,12 +34,12 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "../../Common.h"
+#include "../../RemoteProtocolBridgeCommon.h"
 #include "../ProtocolProcessor_Abstract.h"
 
 #include "SenderAwareOSCReceiver.h"
 
-#include "../../../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 using namespace SenderAwareOSC;
 
@@ -53,6 +53,8 @@ class OSCProtocolProcessor : public SenderAwareOSCReceiver::SAOListener<OSCRecei
 public:
 	OSCProtocolProcessor(int listenerPortNumber);
 	~OSCProtocolProcessor();
+
+	void SetProtocolConfigurationData(const ProcessingEngineConfig::ProtocolData& protocolData, const Array<RemoteObject>& activeObjs, NodeId NId, ProtocolId PId) override;
 
 	bool Start() override;
 	bool Stop() override;

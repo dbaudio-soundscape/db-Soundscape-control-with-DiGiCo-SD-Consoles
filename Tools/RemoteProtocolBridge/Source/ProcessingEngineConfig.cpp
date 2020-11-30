@@ -218,6 +218,41 @@ bool ProcessingEngineConfig::SetUseActiveHandling(NodeId NId, ProtocolId PId, bo
 }
 
 /**
+ * Getter for the polling interval in ms for a given nodes protocol
+ *
+ * @param NId	The node id to use to get objectdata for
+ * @param PId	The protocol id to use to get objectdata for
+ * @return		The polling interval in ms
+ */
+int ProcessingEngineConfig::GetPollingInterval(NodeId NId, ProtocolId PId) const
+{
+	return GetProtocolData(NId, PId).PollingInterval;
+}
+
+/**
+ * Setter for the polling interval in ms for a given nodes protocol
+ *
+ * @param NId		The node id to use to get objectdata for
+ * @param PId		The protocol id to use to get objectdata for
+ * @param interval	The interval to set for the given protocol
+ * @return			True on success, false if given NId/PId are not valid
+ */
+bool ProcessingEngineConfig::SetPollingInterval(NodeId NId, ProtocolId PId, int interval)
+{
+	if (m_nodeData.contains(NId) && m_protocolData.contains(PId))
+	{
+		ProtocolData protocol = m_protocolData[PId];
+
+		protocol.PollingInterval = interval;
+		m_protocolData.set(PId, protocol);
+
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Setter for the protocol ports for a given node/protocol
  *
  * @param NId		The node id to use to set protocol ports for
@@ -384,6 +419,7 @@ bool ProcessingEngineConfig::ReadConfiguration()
 					if (nodeChild->getTagName() == "ObjectHandling")
 					{
 						node.ObjectHandling.Mode = ObjectHandlingModeFromString(nodeChild->getAttributeValue(0));
+						node.ObjectHandling.Prec = nodeChild->getAttributeValue(1).getDoubleValue();
 
 						XmlElement* nodeDataChild = nodeChild->getFirstChildElement();
 						while (nodeDataChild != nullptr)
@@ -401,6 +437,7 @@ bool ProcessingEngineConfig::ReadConfiguration()
 						ProtocolData protocol;
 						protocol.Id = ProtocolId(ValidateUniqueId(nodeChild->getAttributeValue(0).getIntValue()));
 						protocol.Type = ProtocolTypeFromString(nodeChild->getAttributeValue(1));
+						protocol.PollingInterval = ET_DefaultPollingRate;
 						protocol.UsesActiveRemoteObjects = nodeChild->getAttributeValue(2).getIntValue()>0;
 
 						XmlElement* nodeDataChild = nodeChild->getFirstChildElement();
@@ -412,6 +449,8 @@ bool ProcessingEngineConfig::ReadConfiguration()
 								protocol.ClientPort = nodeDataChild->getAttributeValue(0).getIntValue();
 							else if (nodeDataChild->getTagName() == "HostPort")
 								protocol.HostPort = nodeDataChild->getAttributeValue(0).getIntValue();
+							else if (nodeDataChild->getTagName() == "PollingInterval")
+								protocol.PollingInterval = nodeDataChild->getAttributeValue(0).getIntValue();
 							else if (nodeDataChild->getTagName() == "ActiveObjects")
 								ReadActiveObjects(nodeDataChild->getFirstChildElement(), protocol.RemoteObjects);
 
@@ -435,6 +474,7 @@ bool ProcessingEngineConfig::ReadConfiguration()
 						ProtocolData protocol;
 						protocol.Id = ProtocolId(ValidateUniqueId(nodeChild->getAttributeValue(0).getIntValue()));
 						protocol.Type = ProtocolTypeFromString(nodeChild->getAttributeValue(1));
+						protocol.PollingInterval = ET_DefaultPollingRate;
 						protocol.UsesActiveRemoteObjects = nodeChild->getAttributeValue(2).getIntValue()>0;
 
 						XmlElement* nodeDataChild = nodeChild->getFirstChildElement();
@@ -446,6 +486,8 @@ bool ProcessingEngineConfig::ReadConfiguration()
 								protocol.ClientPort = nodeDataChild->getAttributeValue(0).getIntValue();
 							else if (nodeDataChild->getTagName() == "HostPort")
 								protocol.HostPort = nodeDataChild->getAttributeValue(0).getIntValue();
+							else if (nodeDataChild->getTagName() == "PollingInterval")
+								protocol.PollingInterval = nodeDataChild->getAttributeValue(0).getIntValue();
 							else if (nodeDataChild->getTagName() == "ActiveObjects")
 								ReadActiveObjects(nodeDataChild->getFirstChildElement(), protocol.RemoteObjects);
 
@@ -575,6 +617,28 @@ bool ProcessingEngineConfig::ReadActiveObjects(XmlElement* ActiveObjectsElement,
 }
 
 /**
+ * Method to read the node configuration part regarding polling interval per protocol.
+ * Includes fixup to default if not found in xml.
+ *
+ * @param PollingIntervalElement	The xml element for the nodes' protocols' polling interval in the DOM
+ * @param PollingInterval			The polling interval var to fill according config contents
+ * @return	True if value was read from xml, false if default was used.
+ */
+bool ProcessingEngineConfig::ReadPollingInterval(XmlElement* PollingIntervalElement, int& PollingInterval)
+{
+	XmlElement* objectChild = PollingIntervalElement;
+	PollingInterval = ET_DefaultPollingRate;
+
+	if (objectChild != nullptr && objectChild->getAttributeName(0) == "Interval")
+	{
+		PollingInterval = objectChild->getAttributeValue(0).getIntValue();
+		return true;
+	}
+	else
+		return false;
+}
+
+/**
  * Writes the configuration data from object into xml file
  *
  * @return	True on success, false if failed
@@ -596,6 +660,7 @@ bool ProcessingEngineConfig::WriteConfiguration()
 					if (XmlElement* ObjectHandlingElement = NodeElement->createNewChildElement("ObjectHandling"))
 					{
 						ObjectHandlingElement->setAttribute("Mode", ObjectHandlingModeToString(m_nodeData[m_nodeIds[i]].ObjectHandling.Mode));
+						ObjectHandlingElement->setAttribute("DataPrecision", m_nodeData[m_nodeIds[i]].ObjectHandling.Prec);
 						if (XmlElement* ProtocolAChCntElement = ObjectHandlingElement->createNewChildElement("ProtocolAChCnt"))
 							ProtocolAChCntElement->setAttribute("Count", m_nodeData[m_nodeIds[i]].ObjectHandling.ACnt);
 						if (XmlElement* ProtocolBChCntElement = ObjectHandlingElement->createNewChildElement("ProtocolBChCnt"))
@@ -619,6 +684,8 @@ bool ProcessingEngineConfig::WriteConfiguration()
 							ClientPortElement->setAttribute("Port", m_protocolData[PAId].ClientPort);
 						if (XmlElement* HostPortElement = ProtocolAElement->createNewChildElement("HostPort"))
 							HostPortElement->setAttribute("Port", m_protocolData[PAId].HostPort);
+						if (XmlElement* PollingIntervalElement = ProtocolAElement->createNewChildElement("PollingInterval"))
+							PollingIntervalElement->setAttribute("Interval", m_protocolData[PAId].PollingInterval);
 						if (XmlElement* ActiveObjectsElement = ProtocolAElement->createNewChildElement("ActiveObjects"))
 							WriteActiveObjects(ActiveObjectsElement, m_protocolData[PAId].RemoteObjects);
 					}
@@ -640,6 +707,8 @@ bool ProcessingEngineConfig::WriteConfiguration()
 							ClientPortElement->setAttribute("Port", m_protocolData[PBId].ClientPort);
 						if (XmlElement* HostPortElement = ProtocolBElement->createNewChildElement("HostPort"))
 							HostPortElement->setAttribute("Port", m_protocolData[PBId].HostPort);
+						if (XmlElement* PollingIntervalElement = ProtocolBElement->createNewChildElement("PollingInterval"))
+							PollingIntervalElement->setAttribute("Interval", m_protocolData[PBId].PollingInterval);
 						if (XmlElement* ActiveObjectsElement = ProtocolBElement->createNewChildElement("ActiveObjects"))
 							WriteActiveObjects(ActiveObjectsElement, m_protocolData[PBId].RemoteObjects);
 					}
@@ -806,9 +875,10 @@ void ProcessingEngineConfig::AddDefaultNode()
 	NodeData node;
 
 	node.Id = GetNextUniqueId();
-	node.ObjectHandling.Mode = OHM_Bypass;
+	node.ObjectHandling.Mode = OHM_Forward_only_valueChanges;
 	node.ObjectHandling.ACnt = 0;
 	node.ObjectHandling.BCnt = 0;
+	node.ObjectHandling.Prec = 0.001;
 
 	ProtocolData ProtocolA;
 	ProtocolA.Id = GetNextUniqueId();
@@ -817,6 +887,7 @@ void ProcessingEngineConfig::AddDefaultNode()
 	ProtocolA.HostPort = 50011;
 	ProtocolA.IpAddress = "10.255.0.100";
 	ProtocolA.UsesActiveRemoteObjects = false;
+	ProtocolA.PollingInterval = ET_DefaultPollingRate;
 	ProtocolA.RemoteObjects = remoteObjects;
 
 	m_protocolData.set(ProtocolA.Id, ProtocolA);
@@ -829,6 +900,7 @@ void ProcessingEngineConfig::AddDefaultNode()
 	ProtocolB.HostPort = 50013;
 	ProtocolB.IpAddress = "127.0.0.1";
 	ProtocolB.UsesActiveRemoteObjects = false;
+	ProtocolB.PollingInterval = ET_DefaultPollingRate;
 	ProtocolB.RemoteObjects = remoteObjects;
 
 	m_protocolData.set(ProtocolB.Id, ProtocolB);
@@ -874,6 +946,7 @@ void ProcessingEngineConfig::AddDefaultProtocolB(NodeId NId)
 	ProtocolB.HostPort = 50013;
 	ProtocolB.IpAddress = "127.0.0.1";
 	ProtocolB.UsesActiveRemoteObjects = false;
+	ProtocolB.PollingInterval = ET_DefaultPollingRate;
 	ProtocolB.RemoteObjects = remoteObjects;
 	
 	m_protocolData.set(ProtocolB.Id, ProtocolB);
@@ -918,6 +991,7 @@ void ProcessingEngineConfig::AddDefaultProtocolA(NodeId NId)
 	ProtocolA.HostPort = 50011;
 	ProtocolA.IpAddress = "10.255.0.100";
 	ProtocolA.UsesActiveRemoteObjects = false;
+	ProtocolA.PollingInterval = ET_DefaultPollingRate;
 	ProtocolA.RemoteObjects = remoteObjects;
 	
 	m_protocolData.set(ProtocolA.Id, ProtocolA);
@@ -1054,6 +1128,12 @@ String ProcessingEngineConfig::ObjectHandlingModeToString(ObjectHandlingMode ohm
 		return "Reroute single A (x), (y) to combi B (xy)";
 	case OHM_Mux_nA_to_mB:
 		return "Multiplex multiple n-ch. A to m-ch. B protocols";
+	case OHM_Forward_only_valueChanges:
+		return "Forward value changes only";
+	case OHM_Forward_A_to_B_only:
+		return "Forward data only (A->B)";
+	case OHM_Reverse_B_to_A_only:
+		return "Reverse data only (B->A)";
 	default:
 		return "";
 	}
@@ -1070,6 +1150,12 @@ ObjectHandlingMode ProcessingEngineConfig::ObjectHandlingModeFromString(String m
 		return OHM_Remap_A_X_Y_to_B_XY;
 	if (mode == ObjectHandlingModeToString(OHM_Mux_nA_to_mB))
 		return OHM_Mux_nA_to_mB;
+	if (mode == ObjectHandlingModeToString(OHM_Forward_only_valueChanges))
+		return OHM_Forward_only_valueChanges;
+	if (mode == ObjectHandlingModeToString(OHM_Forward_A_to_B_only))
+		return OHM_Forward_A_to_B_only;
+	if (mode == ObjectHandlingModeToString(OHM_Reverse_B_to_A_only))
+		return OHM_Reverse_B_to_A_only;
 
 	return OHM_Invalid;
 }

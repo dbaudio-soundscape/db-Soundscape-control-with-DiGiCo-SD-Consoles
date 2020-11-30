@@ -35,8 +35,8 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "LoggingWindow.h"
 
 #include "LoggingTarget_Interface.h"
-#include "MainComponent.h"
-#include "Common.h"
+#include "MainRemoteProtocolBridgeComponent.h"
+#include "RemoteProtocolBridgeCommon.h"
 
 #include "ProtocolProcessor/OSCProtocolProcessor/OSCProtocolProcessor.h"
 #include "ProtocolProcessor/OCAProtocolProcessor/OCAProtocolProcessor.h"
@@ -603,7 +603,7 @@ void LoggingWindow::AddLogData(NodeId NId, ProtocolId SenderPId, ProtocolType Se
  * Method to add parent object as 'listener'.
  * This is done in a way JUCE uses to connect child-parent relations for handling 'signal' calls
  */
-void LoggingWindow::AddListener(MainComponent* listener)
+void LoggingWindow::AddListener(MainRemoteProtocolBridgeComponent* listener)
 {
 	m_parentListener = listener;
 }

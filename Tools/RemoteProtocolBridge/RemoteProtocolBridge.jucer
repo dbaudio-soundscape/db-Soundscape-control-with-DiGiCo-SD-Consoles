@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT name="RemoteProtocolBridge" projectType="guiapp" jucerVersion="5.4.5"
-              companyName="d&amp;b audiotechnik GmbH &amp; Co. KG" companyWebsite="www.dbaudio.com"
-              companyEmail="support@dbaudio.com" version="0.4.1" bundleIdentifier="com.dbaudio.RemoteProtocolBridge"
+<JUCERPROJECT name="RemoteProtocolBridge" projectType="guiapp" companyName="d&amp;b audiotechnik GmbH &amp; Co. KG"
+              companyWebsite="www.dbaudio.com" companyEmail="support@dbaudio.com"
+              version="0.4.4" bundleIdentifier="com.dbaudio.RemoteProtocolBridge"
               companyCopyright="Copyright (c) by d&amp;b audiotechnik GmbH &amp; Co. KG; all rights reserved."
-              id="BLZw0l">
+              id="BLZw0l" jucerFormatVersion="1">
   <MAINGROUP id="NrfEgH" name="RemoteProtocolBridge">
     <GROUP id="{B33DB198-B9AF-C448-4DF9-16BC6A86A485}" name="Resources">
       <GROUP id="{437F65E3-25E5-CA42-F0DF-11A45E5336F3}" name="Images">
@@ -49,11 +49,13 @@
       <FILE id="cmyGzp" name="LoggingWindow.cpp" compile="1" resource="0"
             file="Source/LoggingWindow.cpp"/>
       <FILE id="I0koeA" name="LoggingWindow.h" compile="0" resource="0" file="Source/LoggingWindow.h"/>
-      <FILE id="B4PNx6" name="Common.h" compile="0" resource="0" file="Source/Common.h"/>
+      <FILE id="B4PNx6" name="RemoteProtocolBridgeCommon.h" compile="0" resource="0"
+            file="Source/RemoteProtocolBridgeCommon.h"/>
       <FILE id="yV7j3T" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="sir73h" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
-      <FILE id="GAjmA8" name="MainComponent.cpp" compile="1" resource="0"
-            file="Source/MainComponent.cpp"/>
+      <FILE id="sir73h" name="MainRemoteProtocolBridgeComponent.h" compile="0"
+            resource="0" file="Source/MainRemoteProtocolBridgeComponent.h"/>
+      <FILE id="GAjmA8" name="MainRemoteProtocolBridgeComponent.cpp" compile="1"
+            resource="0" file="Source/MainRemoteProtocolBridgeComponent.cpp"/>
       <FILE id="eXtasA" name="NodeComponent.h" compile="0" resource="0" file="Source/NodeComponent.h"/>
       <FILE id="Mx56NT" name="NodeComponent.cpp" compile="1" resource="0"
             file="Source/NodeComponent.cpp"/>
@@ -152,6 +154,28 @@
         <MODULEPATH id="juce_audio_basics" path="../../../../../../JUCE/modules"/>
       </MODULEPATHS>
     </VS2017>
+    <VS2019 targetFolder="Builds/VisualStudio2019" smallIcon="cuye92" bigIcon="cuye92">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video"/>
+        <MODULEPATH id="juce_osc"/>
+        <MODULEPATH id="juce_opengl"/>
+        <MODULEPATH id="juce_gui_extra"/>
+        <MODULEPATH id="juce_gui_basics"/>
+        <MODULEPATH id="juce_graphics"/>
+        <MODULEPATH id="juce_events"/>
+        <MODULEPATH id="juce_data_structures"/>
+        <MODULEPATH id="juce_cryptography"/>
+        <MODULEPATH id="juce_core"/>
+        <MODULEPATH id="juce_audio_processors"/>
+        <MODULEPATH id="juce_audio_formats"/>
+        <MODULEPATH id="juce_audio_devices"/>
+        <MODULEPATH id="juce_audio_basics"/>
+      </MODULEPATHS>
+    </VS2019>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

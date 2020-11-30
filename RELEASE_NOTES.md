@@ -6,6 +6,16 @@ Copyright (C) 2017-2020, d&b audiotechnik GmbH & Co. KG
 * "Bugfixes" are newly fixed bugs with the corresponding release
 * "Know issues" are issues (inconveniences or bugs) known to exist in the corresponding release
 
+## V0.4.4
+
+### Features
+
+* New object handling modes to allow only forward, reverse or value change based protocol bridging
+
+### Bugfixes
+
+* Fix for processing of last channel number in object handling mode to support multiple DS100 to single console (multiplex n A to m B protocol object handling mode)
+
 ## V0.4.1
 
 ### Features

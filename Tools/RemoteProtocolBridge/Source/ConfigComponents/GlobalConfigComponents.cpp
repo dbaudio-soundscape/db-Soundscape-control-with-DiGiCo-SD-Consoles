@@ -34,10 +34,10 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "GlobalConfigComponents.h"
 
-#include "../MainComponent.h"
+#include "../MainRemoteProtocolBridgeComponent.h"
 #include "../NodeComponent.h"
 #include "../ProtocolComponent.h"
-#include "../Common.h"
+#include "../RemoteProtocolBridgeCommon.h"
 
 //==============================================================================
 // Class GlobalConfigComponent
@@ -263,7 +263,7 @@ void GlobalConfigWindow::closeButtonPressed()
  * Method to add parent object as 'listener'.
  * This is done in a way JUCE uses to connect child-parent relations for handling 'signal' calls
  */
-void GlobalConfigWindow::AddListener(MainComponent* listener)
+void GlobalConfigWindow::AddListener(MainRemoteProtocolBridgeComponent* listener)
 {
 	m_parentListener = listener;
 }

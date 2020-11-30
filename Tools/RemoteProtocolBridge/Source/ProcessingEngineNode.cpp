@@ -50,7 +50,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 ProcessingEngineNode::ProcessingEngineNode()
 {
-	m_parent		= 0;
 	m_dataHandling	= 0;
 }
 
@@ -59,10 +58,10 @@ ProcessingEngineNode::ProcessingEngineNode()
  *
  * @param parentEngine	The engine object to be used as internal parent
  */
-ProcessingEngineNode::ProcessingEngineNode(ProcessingEngine* parentEngine)
+ProcessingEngineNode::ProcessingEngineNode(ProcessingEngineNode::NodeListener* listener)
 	: ProcessingEngineNode()
 {
-	m_parent = parentEngine;
+	AddListener(listener);
 }
 
 /**
@@ -71,6 +70,16 @@ ProcessingEngineNode::ProcessingEngineNode(ProcessingEngine* parentEngine)
 ProcessingEngineNode::~ProcessingEngineNode()
 {
 	Stop();
+}
+
+/**
+ * Method to register a listener object to be called when the node has received the respective data via a node protocol.
+ * @param listener	The listener object to add to the internal list of listeners
+ */
+void ProcessingEngineNode::AddListener(ProcessingEngineNode::NodeListener* listener)
+{
+	if (listener)
+		m_listeners.push_back(listener);
 }
 
 /**
@@ -216,6 +225,12 @@ ObjectDataHandling_Abstract* ProcessingEngineNode::CreateObjectDataHandling(Obje
 {
 	switch (mode)
 	{
+	case OHM_Reverse_B_to_A_only:
+		return new Reverse_B_to_A_only(this);
+	case OHM_Forward_A_to_B_only:
+		return new Forward_A_to_B_only(this);
+	case OHM_Forward_only_valueChanges:
+		return new Forward_only_valueChanges(this);
 	case OHM_Remap_A_X_Y_to_B_XY:
 		return new Remap_A_X_Y_to_B_XY_Handling(this);
 	case OHM_Mux_nA_to_mB:
@@ -238,9 +253,9 @@ ObjectDataHandling_Abstract* ProcessingEngineNode::CreateObjectDataHandling(Obje
  */
 void ProcessingEngineNode::OnProtocolMessageReceived(ProtocolProcessor_Abstract* receiver, RemoteObjectIdentifier id, RemoteObjectMessageData& msgData)
 {
-	// log message traffic in parent engine
-	if (m_parent)
-		m_parent->LogInput(this, receiver, id, msgData);
+	// broadcast received data to all listeners
+	for (auto listener : m_listeners)
+		listener->HandleNodeData(this->GetId(), receiver->GetId(), receiver->GetType(), id, msgData);
 	
 	if (m_dataHandling)
 		m_dataHandling->OnReceivedMessageFromProtocol(receiver->GetId(), id, msgData);

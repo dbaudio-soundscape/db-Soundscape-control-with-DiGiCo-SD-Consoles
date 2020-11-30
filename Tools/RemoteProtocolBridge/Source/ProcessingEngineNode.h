@@ -34,7 +34,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "Common.h"
+#include "RemoteProtocolBridgeCommon.h"
 
 #include "ProtocolProcessor/ProtocolProcessor_Abstract.h"
 
@@ -49,9 +49,28 @@ class ProcessingEngine;
 class ProcessingEngineNode : public ProtocolProcessor_Abstract::Listener
 {
 public:
+	/**
+	 * Abstract embedded interface class for message data handling
+	 */
+	class NodeListener
+	{
+	public:
+		NodeListener() {};
+		virtual ~NodeListener() {};
+
+		/**
+		 * Method to be overloaded by ancestors to act as an interface
+		 * for handling of received message data
+		 */
+		virtual void HandleNodeData(NodeId nodeId, ProtocolId senderProtocolId, ProtocolType senderProtocolType, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) = 0;
+	};
+
+public:
 	ProcessingEngineNode();
-	ProcessingEngineNode(ProcessingEngine* parentEngine);
+	ProcessingEngineNode(ProcessingEngineNode::NodeListener* listener);
 	~ProcessingEngineNode();
+
+	void AddListener(ProcessingEngineNode::NodeListener* listener);
 
 	NodeId GetId();
 
@@ -74,6 +93,6 @@ private:
 	std::map<ProtocolId, std::unique_ptr<ProtocolProcessor_Abstract>>	m_typeAProtocols;	/**< The remote protocols that act with role A of this node. */
 	std::map<ProtocolId, std::unique_ptr<ProtocolProcessor_Abstract>>	m_typeBProtocols;	/**< The remote protocols that act with role B of this node. */
 
-	ProcessingEngine*													m_parent;			/**< The parent engine object. Needed for e.g. logging message traffic. */
+	std::vector<ProcessingEngineNode::NodeListener*>					m_listeners;		/**< The listner objects, for e.g. logging message traffic. */
 
 };

@@ -35,7 +35,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ProtocolConfigComponents.h"
 
 #include "../ProtocolComponent.h"
-#include "../Common.h"
+#include "../RemoteProtocolBridgeCommon.h"
 
 //==============================================================================
 // Class ProtocolConfigComponent_Abstract
@@ -182,6 +182,40 @@ void ProtocolConfigComponent_Abstract::FillProtocolPorts(const std::pair<int, in
 void ProtocolConfigComponent_Abstract::SetActiveHandlingUsed(bool active)
 {
 	ignoreUnused(active);
+}
+
+/**
+ * Method to trigger dumping contents of configcomponent member
+ * to global config object
+ *
+ * @param NId The id of the node to dump the config for
+ * @param NId The id of the protocol to dump the config for
+ * @param config	The global configuration object to dump data to
+ * @return	True on success
+ */
+bool ProtocolConfigComponent_Abstract::DumpConfig(NodeId NId, ProtocolId PId, ProcessingEngineConfig& config)
+{
+	config.SetProtocolPorts(NId, PId, DumpProtocolPorts());
+	config.SetUseActiveHandling(NId, PId, DumpActiveHandlingUsed());
+	config.SetRemoteObjectsToActivate(NId, PId, DumpActiveRemoteObjects());
+
+	return true;
+}
+
+/**
+ * Setter method to trigger filling contents of
+ * configcomponent member with configuration contents
+ *
+ * @param NId The id of the node to set the config for
+ * @param NId The id of the protocol to set the config for
+ * @param config	The global configuration object.
+ */
+void ProtocolConfigComponent_Abstract::SetConfig(NodeId NId, ProtocolId PId, const ProcessingEngineConfig& config)
+{
+	std::pair<int, int> ports(config.GetProtocolData(NId, PId).ClientPort, config.GetProtocolData(NId, PId).HostPort);
+	FillProtocolPorts(ports);
+	SetActiveHandlingUsed(config.GetUseActiveHandling(NId, PId));
+	FillActiveRemoteObjects(config.GetRemoteObjectsToActivate(NId, PId));
 }
 
 
@@ -610,6 +644,11 @@ OSCProtocolConfigComponent::OSCProtocolConfigComponent()
 		}
 	}
 
+	m_PollingIntervalLabel = std::make_unique<Label>();
+	addAndMakeVisible(m_PollingIntervalLabel.get());
+	m_PollingIntervalLabel->setText("Polling interval", dontSendNotification);
+	m_PollingIntervalEdit = std::make_unique<TextEditor>();
+	addAndMakeVisible(m_PollingIntervalEdit.get());
 }
 
 /**
@@ -682,6 +721,11 @@ void OSCProtocolConfigComponent::resized()
 		if (m_RemObjMappingArea4Checks.count(i) && m_RemObjMappingArea4Checks.at(i))
 			m_RemObjMappingArea4Checks.at(i)->setBounds(Rectangle<int>(remObjNameWidth + UIS_Margin_s + remObjEnableWidth + remObjChRngeWidth + 3 * (UIS_ElmSize + UIS_Margin_s), yOffset, UIS_ElmSize + UIS_Margin_s, UIS_ElmSize));
 	}
+
+	// polling interval edit/label
+	yOffset += UIS_Margin_s + UIS_Margin_s + UIS_ElmSize;
+	m_PollingIntervalLabel->setBounds(Rectangle<int>(UIS_Margin_s, yOffset, remObjNameWidth - UIS_Margin_s, UIS_ElmSize));
+	m_PollingIntervalEdit->setBounds(Rectangle<int>(2 * UIS_Margin_s + remObjNameWidth, yOffset, remObjEnableWidth + remObjChRngeWidth - UIS_Margin_m, UIS_ElmSize));
 
 	// ok button
 	yOffset += UIS_Margin_s + UIS_ElmSize + UIS_Margin_s;
@@ -894,6 +938,44 @@ bool OSCProtocolConfigComponent::DumpActiveHandlingUsed()
 }
 
 /**
+ * Method to trigger dumping contents of configcomponent member
+ * to integer interval return value
+ *
+ * @return	Polling interval time value.
+ */
+int OSCProtocolConfigComponent::DumpPollingInterval()
+{
+	int PollingInterval = 0;
+
+	StringArray intervalStrings;
+	intervalStrings.addTokens(m_PollingIntervalEdit->getText(), ";, ", "");
+	if (intervalStrings.size() == 1)
+	{
+		PollingInterval = intervalStrings[0].getIntValue();
+	}
+	else if (intervalStrings.size() == 2 && intervalStrings[1] == "ms")
+	{
+		PollingInterval = intervalStrings[0].getIntValue();
+	}
+
+	return PollingInterval;
+}
+
+/**
+ * Method to trigger filling contents of
+ * configcomponent member with polling interval value
+ *
+ * @param PollingInterval The interval value
+ */
+void OSCProtocolConfigComponent::FillPollingInterval(int PollingInterval)
+{
+	if (m_PollingIntervalEdit)
+		m_PollingIntervalEdit->setText(String(PollingInterval) + String(" ms"));
+	
+	return;
+}
+
+/**
  * Method to get the components' suggested size. This will be deprecated as soon as
  * the primitive UI is refactored and uses dynamic / proper layouting
  *
@@ -906,11 +988,43 @@ const std::pair<int, int> OSCProtocolConfigComponent::GetSuggestedSize()
 					UIS_Margin_s + UIS_ElmSize + 
 					2 * UIS_Margin_m + UIS_ElmSize + 
 					UIS_ElmSize + 
-					((ROI_UserMAX - ROI_Invalid)*(UIS_Margin_s + UIS_ElmSize + UIS_Margin_s)) + 
+					((ROI_UserMAX - ROI_Invalid)*(UIS_Margin_s + UIS_ElmSize + UIS_Margin_s)) +
+					UIS_Margin_s + UIS_Margin_s + UIS_ElmSize +
 					UIS_Margin_s + UIS_ElmSize + UIS_Margin_s +
 					UIS_Margin_s;
 
 	return std::pair<int, int>(width, height);
+}
+
+/**
+ * Reimplemented method to trigger dumping contents of configcomponent member
+ * to global config object
+ *
+ * @param NId The id of the node to dump the config for
+ * @param NId The id of the protocol to dump the config for
+ * @param config	The global configuration object to dump data to
+ * @return	True on success
+ */
+bool OSCProtocolConfigComponent::DumpConfig(NodeId NId, ProtocolId PId, ProcessingEngineConfig& config)
+{
+	config.SetPollingInterval(NId, PId, DumpPollingInterval());
+
+	return ProtocolConfigComponent_Abstract::DumpConfig(NId, PId, config);
+}
+
+/**
+ * Reimplemented setter method to trigger filling contents of
+ * configcomponent member with configuration contents
+ *
+ * @param NId The id of the node to set the config for
+ * @param NId The id of the protocol to set the config for
+ * @param config	The global configuration object.
+ */
+void OSCProtocolConfigComponent::SetConfig(NodeId NId, ProtocolId PId, const ProcessingEngineConfig& config)
+{
+	ProtocolConfigComponent_Abstract::SetConfig(NId, PId, config);
+
+	FillPollingInterval(config.GetProtocolData(NId, PId).PollingInterval);
 }
 
 
@@ -995,9 +1109,7 @@ void ProtocolConfigWindow::AddListener(ProtocolComponent* listener)
  */
 bool ProtocolConfigWindow::DumpConfig(ProcessingEngineConfig& config)
 {
-	config.SetProtocolPorts(m_NId, m_PId, m_configComponent->DumpProtocolPorts());
-	config.SetUseActiveHandling(m_NId, m_PId, m_configComponent->DumpActiveHandlingUsed());
-	config.SetRemoteObjectsToActivate(m_NId, m_PId, m_configComponent->DumpActiveRemoteObjects());
+	m_configComponent->DumpConfig(m_NId, m_PId, config);
 
 	return true;
 }
@@ -1010,10 +1122,7 @@ bool ProtocolConfigWindow::DumpConfig(ProcessingEngineConfig& config)
  */
 void ProtocolConfigWindow::SetConfig(const ProcessingEngineConfig& config)
 {
-	std::pair<int, int> ports(config.GetProtocolData(m_NId, m_PId).ClientPort, config.GetProtocolData(m_NId, m_PId).HostPort);
-	m_configComponent->FillProtocolPorts(ports);
-	m_configComponent->SetActiveHandlingUsed(config.GetUseActiveHandling(m_NId, m_PId));
-	m_configComponent->FillActiveRemoteObjects(config.GetRemoteObjectsToActivate(m_NId, m_PId));
+	m_configComponent->SetConfig(m_NId, m_PId, config);
 }
 
 /**

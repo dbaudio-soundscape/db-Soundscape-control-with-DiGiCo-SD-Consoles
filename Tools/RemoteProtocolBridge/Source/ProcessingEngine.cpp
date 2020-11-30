@@ -118,29 +118,6 @@ void ProcessingEngine::SetConfig(ProcessingEngineConfig &config)
 }
 
 /**
- * Method to enqueue logging data regarding message traffic in the nodes.
- * This method is to be used by child nodes to output their message traffic to log.
- *
- * @param node		The node the logging data originates from
- * @param sender	The protocol processor that has received the message
- * @param Id		The remote object id the message refers to
- * @param msgData	The remote object message data of the object that is currently sent by a node and therefor forwarded here to be logged
- */
-void ProcessingEngine::LogInput(ProcessingEngineNode* node, ProtocolProcessor_Abstract* sender, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
-{
-	if (!IsLoggingEnabled())
-		return;
-
-	if (!node || !sender)
-		return;
-
-	if (m_logTarget)
-	{
-		m_logTarget->AddLogData(node->GetId(), sender->GetId(), sender->GetType(), Id, msgData);
-	}
-}
-
-/**
  * Setter for internal logging enabled flag.
  *
  * @param enable	The state (en-/disable) to set the internal flag to
@@ -168,4 +145,24 @@ bool ProcessingEngine::IsLoggingEnabled()
 void ProcessingEngine::SetLoggingTarget(LoggingTarget_Interface* logTarget)
 {
 	m_logTarget = logTarget;
+}
+
+/**
+ * Method overloaded to enqueue logging data regarding message traffic in the nodes.
+ *
+ * @param nodeId				The node the logging data originates from
+ * @param senderProtocolId		The protocol processor that has received the message
+ * @param senderProtocolType	The protocol type of the receiving protocol
+ * @param objectId					The remote object id the message refers to
+ * @param msgData				The remote object message data of the object that is currently sent by a node and therefor forwarded here to be logged
+ */
+void ProcessingEngine::HandleNodeData(NodeId nodeId, ProtocolId senderProtocolId, ProtocolType senderProtocolType, RemoteObjectIdentifier objectId, RemoteObjectMessageData& msgData)
+{
+	if (!IsLoggingEnabled())
+		return;
+
+	if (m_logTarget)
+	{
+		m_logTarget->AddLogData(nodeId, senderProtocolId, senderProtocolType, objectId, msgData);
+	}
 }

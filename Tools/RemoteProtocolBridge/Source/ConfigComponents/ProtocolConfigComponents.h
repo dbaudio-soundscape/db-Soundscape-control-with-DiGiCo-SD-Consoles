@@ -34,9 +34,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
-#include "../Common.h"
+#include "../RemoteProtocolBridgeCommon.h"
 #include "../ProcessingEngine.h"
 
 // Fwd. Declarations
@@ -54,18 +54,23 @@ public:
 	~ProtocolConfigComponent_Abstract();
 
 	//==============================================================================
-	virtual bool				DumpActiveHandlingUsed() = 0;
-	virtual Array<RemoteObject> DumpActiveRemoteObjects() = 0;
-	virtual std::pair<int, int> DumpProtocolPorts();
-	virtual void				SetActiveHandlingUsed(bool active);
-	virtual void				FillActiveRemoteObjects(const Array<RemoteObject>& Objs) = 0;
-	virtual void				FillProtocolPorts(const std::pair<int, int>& ports);
+	virtual bool DumpConfig(NodeId NId, ProtocolId PId, ProcessingEngineConfig& config);
+	virtual void SetConfig(NodeId NId, ProtocolId PId, const ProcessingEngineConfig& config);
 
 	//==============================================================================
 	virtual const std::pair<int, int> GetSuggestedSize() = 0;
 
 	//==============================================================================
 	virtual void AddListener(ProtocolConfigWindow* listener);
+
+protected:
+	//==============================================================================
+	virtual bool				DumpActiveHandlingUsed() = 0;
+	virtual Array<RemoteObject> DumpActiveRemoteObjects() = 0;
+	virtual std::pair<int, int> DumpProtocolPorts();
+	virtual void				SetActiveHandlingUsed(bool active);
+	virtual void				FillActiveRemoteObjects(const Array<RemoteObject>& Objs) = 0;
+	virtual void				FillProtocolPorts(const std::pair<int, int>& ports);
 
 private:
 	void paint(Graphics&) override;
@@ -97,16 +102,17 @@ public:
 	~BasicProtocolConfigComponent();
 
 	//==============================================================================
-	bool				DumpActiveHandlingUsed() override;
-	Array<RemoteObject> DumpActiveRemoteObjects() override;
-	void				SetActiveHandlingUsed(bool active) override;
-	void				FillActiveRemoteObjects(const Array<RemoteObject>& Objs) override;
-
-	//==============================================================================
 	const std::pair<int, int> GetSuggestedSize() override;
 
 	//==============================================================================
 	void AddListener(ProtocolConfigWindow* listener) override;
+
+protected:
+	//==============================================================================
+	bool				DumpActiveHandlingUsed() override;
+	Array<RemoteObject> DumpActiveRemoteObjects() override;
+	void				SetActiveHandlingUsed(bool active) override;
+	void				FillActiveRemoteObjects(const Array<RemoteObject>& Objs) override;
 
 private:
 	virtual void resized() override;
@@ -142,15 +148,20 @@ public:
 	~OSCProtocolConfigComponent();
 
 	//==============================================================================
-	bool				DumpActiveHandlingUsed() override;
-	Array<RemoteObject> DumpActiveRemoteObjects() override;
-	void				FillActiveRemoteObjects(const Array<RemoteObject>& Objs) override;
+	bool DumpConfig(NodeId NId, ProtocolId PId, ProcessingEngineConfig& config) override;
+	void SetConfig(NodeId NId, ProtocolId PId, const ProcessingEngineConfig& config) override;
 
 	//==============================================================================
 	const std::pair<int, int> GetSuggestedSize() override;
 
 	//==============================================================================
 	void AddListener(ProtocolConfigWindow* listener) override;
+
+protected:
+	//==============================================================================
+	bool				DumpActiveHandlingUsed() override;
+	Array<RemoteObject> DumpActiveRemoteObjects() override;
+	void				FillActiveRemoteObjects(const Array<RemoteObject>& Objs) override;
 
 private:
 	virtual void resized() override;
@@ -159,6 +170,9 @@ private:
 	virtual void textEditorReturnKeyPressed(TextEditor &) override;
 
 	void buttonClicked(Button* button) override;
+
+	void FillPollingInterval(int PollingInterval);
+	int DumpPollingInterval();
 
 	std::map<int, std::unique_ptr<ToggleButton>>	m_RemObjEnableChecks;		/**< Enable checkboxes for all remote object to be configured/listed on ui. */
 	std::map<int, std::unique_ptr<Label>>			m_RemObjNameLabels;			/**< Name labels for all remote object to be configured/listed on ui. */
@@ -175,6 +189,9 @@ private:
 	std::unique_ptr<Label>		m_Mapping2HeadlineLabel;	/**< Headlining Label for mapping2 checks. */
 	std::unique_ptr<Label>		m_Mapping3HeadlineLabel;	/**< Headlining Label for mapping3 checks. */
 	std::unique_ptr<Label>		m_Mapping4HeadlineLabel;	/**< Headlining Label for mapping4 checks. */
+
+	std::unique_ptr<Label>		m_PollingIntervalLabel;		/**< Label as description of polling interval edit. */
+	std::unique_ptr<TextEditor> m_PollingIntervalEdit;		/**< Edit for editing of polling interval. */
 
 };
 

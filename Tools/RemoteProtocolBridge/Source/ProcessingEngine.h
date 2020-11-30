@@ -36,9 +36,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ProcessingEngineConfig.h"
 #include "ProcessingEngineNode.h"
-#include "Common.h"
+#include "RemoteProtocolBridgeCommon.h"
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 // Fwd. Declarations
 class LoggingTarget_Interface;
@@ -49,22 +49,26 @@ class LoggingTarget_Interface;
  * using config class and holds multiple node instances that represent single protocol bridges.
  * The engine is responsible for instanciating node objects and handle their configuration, logging output, running state, etc.
  */
-class ProcessingEngine
+class ProcessingEngine : public ProcessingEngineNode::NodeListener
 {
 public:
 	ProcessingEngine();
 	~ProcessingEngine();
 
+	// ============================================================
 	bool IsLoggingEnabled();
 	bool IsRunning();
-	void LogInput(ProcessingEngineNode* node, ProtocolProcessor_Abstract* sender, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData);
 	void SetConfig(ProcessingEngineConfig &config);
 	void SetLoggingEnabled(bool enable);
 	void SetLoggingTarget(LoggingTarget_Interface* logTarget);
 	bool Start();
 	void Stop();
 
+	// ============================================================
+	void HandleNodeData(NodeId nodeId, ProtocolId senderProtocolId, ProtocolType senderProtocolType, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
 private:
+	// ============================================================
 	ProcessingEngineConfig											m_configuration;	/**< Internal configuration object to hold runtime config and to be passed around for anyone to extract desired config info from. */
 	std::map<unsigned int, std::unique_ptr<ProcessingEngineNode>>	m_ProcessingNodes;	/**< Hash table to hold all node objects currently active as define by config. */
 	bool															m_IsRunning;		/**< Running state flag. */
