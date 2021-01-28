@@ -171,6 +171,58 @@ private:
 };
 
 /**
+ * Class OHMuxAtoBOnlyValueChangesConfigComponent is a container used to hold the GUI
+ * specifically used to configure configuration of mux n A to m B protocol channel counts
+ * and precision for detecting value changes to be forwarded.
+ */
+class OHMuxAtoBOnlyValueChangesConfigComponent : public ObjectHandlingConfigComponent_Abstract,
+	public TextEditor::Listener,
+	public ComboBox::Listener
+{
+	enum PrecVal
+	{
+		PV_INVALID,
+		PV_EVEN,	// 1
+		PV_CENTI,	// 0.1
+		PV_MILLI,	// 0.01
+		PV_MICRO,	// 0.001
+	};
+public:
+	OHMuxAtoBOnlyValueChangesConfigComponent(ObjectHandlingMode mode);
+	~OHMuxAtoBOnlyValueChangesConfigComponent();
+
+	//==============================================================================
+	ProcessingEngineConfig::ObjectHandlingData DumpObjectHandlingData() override;
+	void FillObjectHandlingData(const ProcessingEngineConfig::ObjectHandlingData& ohData) override;
+
+	//==============================================================================
+	const std::pair<int, int> GetSuggestedSize() override;
+
+private:
+	//==============================================================================
+	virtual void resized() override;
+
+	//==============================================================================
+	virtual void textEditorFocusLost(TextEditor&) override;
+	virtual void textEditorReturnKeyPressed(TextEditor&) override;
+
+	//==============================================================================
+	void comboBoxChanged(ComboBox* comboBox) override;
+
+	//==============================================================================
+	static String PrecisionValToString(PrecVal pv);
+
+	//==============================================================================
+	std::unique_ptr<Label>		m_CountALabel;	/**< Headlining Label for enable checks. */
+	std::unique_ptr<TextEditor>	m_CountAEdit;	/**< Headlining Label for channel range edits. */
+	std::unique_ptr<Label>		m_CountBLabel;	/**< Headlining Label for mapping checks. */
+	std::unique_ptr<TextEditor>	m_CountBEdit;	/**< Headlining Label for mapping1 checks. */
+	std::unique_ptr<Label>		m_PrecisionLabel;	/**< Label for precision values. */
+	std::unique_ptr<ComboBox>	m_PrecisionSelect;	/**< Dropdown for possible precision values. */
+
+};
+
+/**
  * Class ObjectHandlingConfigWindow provides a window that embedds an ObjectHandlingConfigComponent_Abstract
  */
 class ObjectHandlingConfigWindow : public DialogWindow

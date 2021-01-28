@@ -1,10 +1,16 @@
 # Release notes for d&b Soundscape RemoteProtocolBridge for DiGiCo SD-Consoles
 
-Copyright (C) 2017-2020, d&b audiotechnik GmbH & Co. KG
+Copyright (C) 2017-2021, d&b audiotechnik GmbH & Co. KG
 
 * "Features" are newly implemented features (or parts of) with the corresponding release
 * "Bugfixes" are newly fixed bugs with the corresponding release
 * "Know issues" are issues (inconveniences or bugs) known to exist in the corresponding release
+
+## V0.4.5
+
+### Features
+
+* New object handling modes to allow value change based protocol bridging combined with multiplexing nA to m B protocols
 
 ## V0.4.4
 

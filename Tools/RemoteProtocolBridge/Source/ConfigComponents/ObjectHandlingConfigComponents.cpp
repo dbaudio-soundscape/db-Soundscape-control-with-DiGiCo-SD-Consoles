@@ -495,6 +495,233 @@ String OHForwardOnlyValueChangesConfigComponent::PrecisionValToString(PrecVal pv
 }
 
 
+//==============================================================================
+// Class OHMuxAtoBOnlyValueChangesConfigComponent
+//==============================================================================
+/**
+ * Class constructor.
+ */
+OHMuxAtoBOnlyValueChangesConfigComponent::OHMuxAtoBOnlyValueChangesConfigComponent(ObjectHandlingMode mode)
+	: ObjectHandlingConfigComponent_Abstract(mode)
+{
+	m_Headline = std::make_unique <Label>();
+	m_Headline->setText("Multiplexing parameters:", dontSendNotification);
+	addAndMakeVisible(m_Headline.get());
+
+
+	m_CountAEdit = std::make_unique<TextEditor>();
+	addAndMakeVisible(m_CountAEdit.get());
+	m_CountAEdit->addListener(this);
+
+	m_CountALabel = std::make_unique<Label>();
+	m_CountALabel->setText("Ch. count per ProtocolA (n)", dontSendNotification);
+	addAndMakeVisible(m_CountALabel.get());
+	m_CountALabel->attachToComponent(m_CountAEdit.get(), true);
+
+	m_CountBEdit = std::make_unique<TextEditor>();
+	addAndMakeVisible(m_CountBEdit.get());
+	m_CountBEdit->addListener(this);
+
+	m_CountBLabel = std::make_unique<Label>();
+	m_CountBLabel->setText("Ch. count per ProtocolB (m)", dontSendNotification);
+	addAndMakeVisible(m_CountBLabel.get());
+	m_CountBLabel->attachToComponent(m_CountBEdit.get(), true);
+
+
+	m_PrecisionSelect = std::make_unique<ComboBox>();
+	addAndMakeVisible(m_PrecisionSelect.get());
+	m_PrecisionSelect->addListener(this);
+
+	m_PrecisionSelect->addItem(PrecisionValToString(PV_EVEN), PV_EVEN);
+	m_PrecisionSelect->addItem(PrecisionValToString(PV_CENTI), PV_CENTI);
+	m_PrecisionSelect->addItem(PrecisionValToString(PV_MILLI), PV_MILLI);
+	m_PrecisionSelect->addItem(PrecisionValToString(PV_MICRO), PV_MICRO);
+
+	m_PrecisionLabel = std::make_unique<Label>();
+	m_PrecisionLabel->setText("Value change precision sensibility", dontSendNotification);
+	addAndMakeVisible(m_PrecisionLabel.get());
+	m_PrecisionLabel->attachToComponent(m_PrecisionSelect.get(), true);
+
+
+	m_applyConfigButton = std::make_unique<TextButton>("Ok");
+	addAndMakeVisible(m_applyConfigButton.get());
+	m_applyConfigButton->addListener(this);
+}
+
+/**
+ * Class destructor.
+ */
+OHMuxAtoBOnlyValueChangesConfigComponent::~OHMuxAtoBOnlyValueChangesConfigComponent()
+{
+}
+
+/**
+ * Reimplemented to resize and re-postion controls on the overview window.
+ */
+void OHMuxAtoBOnlyValueChangesConfigComponent::resized()
+{
+	double usableWidth = (double)(getWidth() - 2 * UIS_Margin_s);
+
+	// active objects headline
+	int yOffset = UIS_Margin_s;
+	m_Headline->setBounds(Rectangle<int>(UIS_Margin_s, yOffset, (int)usableWidth, UIS_ElmSize));
+
+	yOffset += UIS_Margin_s + UIS_ElmSize;
+	m_CountAEdit->setBounds(Rectangle<int>(UIS_WideAttachedLabelWidth + UIS_Margin_s, yOffset, (int)usableWidth - UIS_WideAttachedLabelWidth - UIS_Margin_s, UIS_ElmSize));
+	yOffset += UIS_Margin_s + UIS_ElmSize;
+	m_CountBEdit->setBounds(Rectangle<int>(UIS_WideAttachedLabelWidth + UIS_Margin_s, yOffset, (int)usableWidth - UIS_WideAttachedLabelWidth - UIS_Margin_s, UIS_ElmSize));
+
+	yOffset += UIS_Margin_s + UIS_ElmSize;
+	m_PrecisionSelect->setBounds(Rectangle<int>((int)usableWidth - UIS_ButtonWidth - UIS_Margin_s, yOffset, UIS_ButtonWidth, UIS_ElmSize));
+
+	// ok button
+	yOffset += UIS_Margin_s + UIS_ElmSize + UIS_Margin_s;
+	m_applyConfigButton->setBounds(Rectangle<int>((int)usableWidth - UIS_ButtonWidth, yOffset, UIS_ButtonWidth, UIS_ElmSize));
+}
+
+/**
+ * Callback function for changes to our comboBox.
+ * @param comboBox	The ComboBox object that has changed.
+ */
+void OHMuxAtoBOnlyValueChangesConfigComponent::comboBoxChanged(ComboBox* comboBox)
+{
+	ignoreUnused(comboBox);
+}
+
+/**
+ * Callback function for changes to our textEditors.
+ * @param textEditor	The TextEditor object whose content has just changed.
+ */
+void OHMuxAtoBOnlyValueChangesConfigComponent::textEditorFocusLost(TextEditor& textEditor)
+{
+	ignoreUnused(textEditor);
+}
+
+/**
+ * Callback function for Enter key presses on textEditors.
+ * @param textEditor	The TextEditor object whose where enter key was pressed.
+ */
+void OHMuxAtoBOnlyValueChangesConfigComponent::textEditorReturnKeyPressed(TextEditor& textEditor)
+{
+	ignoreUnused(textEditor);
+}
+
+/**
+ * Method to get the components' suggested size. This will be deprecated as soon as
+ * the primitive UI is refactored and uses dynamic / proper layouting
+ *
+ * @return	The pair of int representing the suggested size for this component
+ */
+const std::pair<int, int> OHMuxAtoBOnlyValueChangesConfigComponent::GetSuggestedSize()
+{
+	int width = UIS_OSCConfigWidth;
+	int height = UIS_Margin_s +
+		2 * UIS_Margin_m + UIS_ElmSize +
+		UIS_Margin_s + UIS_ElmSize +
+		UIS_Margin_s + UIS_ElmSize +
+		UIS_Margin_s + UIS_ElmSize + UIS_Margin_s +
+		UIS_Margin_s + UIS_ElmSize +
+		UIS_Margin_s + UIS_ElmSize + UIS_Margin_s +
+		UIS_Margin_s + UIS_ElmSize;
+
+	return std::pair<int, int>(width, height);
+}
+
+/**
+ * Method to trigger dumping contents of configcomponent member
+ * to list of objects to return to the app to initialize from
+ *
+ * @return	The object handling config data to use when running the engine.
+ */
+ProcessingEngineConfig::ObjectHandlingData OHMuxAtoBOnlyValueChangesConfigComponent::DumpObjectHandlingData()
+{
+	ProcessingEngineConfig::ObjectHandlingData ohData;
+	ohData.Mode = m_mode;
+	if (m_CountAEdit)
+	{
+		ohData.ACnt = m_CountAEdit->getText().getIntValue();
+	}
+	if (m_CountBEdit)
+	{
+		ohData.BCnt = m_CountBEdit->getText().getIntValue();
+	}
+	if (m_PrecisionSelect)
+	{
+		PrecVal pv = static_cast<PrecVal>(m_PrecisionSelect->getSelectedId());
+		switch (pv)
+		{
+		case PV_EVEN:
+			ohData.Prec = 1;
+			break;
+		case PV_CENTI:
+			ohData.Prec = 0.1;
+			break;
+		case PV_MILLI:
+			ohData.Prec = 0.01;
+			break;
+		case PV_MICRO:
+		default:
+			ohData.Prec = 0.001;
+			break;
+		}
+	}
+
+	return ohData;
+}
+
+/**
+ * Method to trigger filling contents of
+ * configcomponent member with ObjectHandling data
+ *
+ * @param ohData	The data to set into UI elms.
+ */
+void OHMuxAtoBOnlyValueChangesConfigComponent::FillObjectHandlingData(const ProcessingEngineConfig::ObjectHandlingData& ohData)
+{
+	if (m_CountAEdit)
+	{
+		m_CountAEdit->setText(String(ohData.ACnt), dontSendNotification);
+	}
+	if (m_CountBEdit)
+	{
+		m_CountBEdit->setText(String(ohData.BCnt), dontSendNotification);
+	}
+	if (m_PrecisionSelect)
+	{
+		if (ohData.Prec == 1)
+			m_PrecisionSelect->setSelectedId(PV_EVEN);
+		else if (ohData.Prec == 0.1)
+			m_PrecisionSelect->setSelectedId(PV_CENTI);
+		else if (ohData.Prec == 0.01)
+			m_PrecisionSelect->setSelectedId(PV_MILLI);
+		else if (ohData.Prec == 0.001)
+			m_PrecisionSelect->setSelectedId(PV_MICRO);
+		else
+			m_PrecisionSelect->setSelectedId(PV_MICRO);
+	}
+}
+
+/**
+ * Helper method to convert a given enum value to its string representation
+ *
+ * @param pv	The precision value enum to get the string for.
+ */
+String OHMuxAtoBOnlyValueChangesConfigComponent::PrecisionValToString(PrecVal pv)
+{
+	switch (pv)
+	{
+	case PV_EVEN:
+		return "1";
+	case PV_CENTI:
+		return "0.1";
+	case PV_MILLI:
+		return "0.01";
+	case PV_MICRO:
+	default:
+		return "0.001";
+	}
+}
+
+
 // **************************************************************************************
 //    class ObjectHandlingConfigWindow
 // **************************************************************************************
@@ -523,6 +750,9 @@ ObjectHandlingConfigWindow::ObjectHandlingConfigWindow(const String &name, Colou
 		break;
 	case ObjectHandlingMode::OHM_Forward_only_valueChanges:
 		m_configComponent = std::make_unique<OHForwardOnlyValueChangesConfigComponent>(mode);
+		break;
+	case ObjectHandlingMode::OHM_Mux_nA_to_mB_withValFilter:
+		m_configComponent = std::make_unique<OHMuxAtoBOnlyValueChangesConfigComponent>(mode);
 		break;
 	case ObjectHandlingMode::OHM_Bypass:
 		// intentionally no break to run into default

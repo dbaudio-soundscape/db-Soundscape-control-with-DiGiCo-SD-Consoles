@@ -74,6 +74,7 @@ NodeComponent::NodeComponent(NodeId NId)
 	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Forward_only_valueChanges), OHM_Forward_only_valueChanges);
 	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Forward_A_to_B_only), OHM_Forward_A_to_B_only);
 	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Reverse_B_to_A_only), OHM_Reverse_B_to_A_only);
+	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Mux_nA_to_mB_withValFilter), OHM_Mux_nA_to_mB_withValFilter);
 	m_NodeModeDrop->setColour(Label::textColourId, Colours::white);
 	m_NodeModeDrop->setJustificationType(Justification::right);
 

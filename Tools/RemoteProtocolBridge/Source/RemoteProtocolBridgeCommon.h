@@ -77,6 +77,7 @@ enum ObjectHandlingMode
 	OHM_Forward_only_valueChanges,	/**< Data filtering mode to only forward value changes. */
 	OHM_Forward_A_to_B_only,		/**< Data filtering mode to only pass on values from Role A to B protocols. */
 	OHM_Reverse_B_to_A_only,		/**< Data filtering mode to only pass on values from Role B to A protocols. */
+	OHM_Mux_nA_to_mB_withValFilter,	/**< Data multiplexing mode from n channel typeA protocols to m channel typeB protocols, combined with filtering to only forward value changes. */
 	OHM_UserMAX						/**< Value to mark enum max; For iteration purpose. */
 };
 
@@ -142,7 +143,7 @@ struct RemoteObjectAddressing
 	 */
 	bool operator==(const RemoteObjectAddressing& o) const
 	{
-		return first == o.first && second == o.second;
+		return (first == o.first) && (second == o.second);
 	}
 	/**
 	 * Unequality comparison operator overload
@@ -156,14 +157,14 @@ struct RemoteObjectAddressing
 	 */
 	bool operator<(const RemoteObjectAddressing& o) const
 	{
-		return first < o.first && second < o.second;
+		return (!(*this > o) && (*this != o));
 	}
 	/**
 	 * Greater than comparison operator overload
 	 */
 	bool operator>(const RemoteObjectAddressing& o) const
 	{
-		return !(*this < o);
+		return (first > o.first) || ((first == o.first) && (second > o.second));
 	}
 };
 

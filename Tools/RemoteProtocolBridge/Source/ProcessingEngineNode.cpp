@@ -225,6 +225,8 @@ ObjectDataHandling_Abstract* ProcessingEngineNode::CreateObjectDataHandling(Obje
 {
 	switch (mode)
 	{
+	case OHM_Mux_nA_to_mB_withValFilter:
+		return new Mux_nA_to_mB_withValFilter(this);
 	case OHM_Reverse_B_to_A_only:
 		return new Reverse_B_to_A_only(this);
 	case OHM_Forward_A_to_B_only:
@@ -268,12 +270,12 @@ void ProcessingEngineNode::OnProtocolMessageReceived(ProtocolProcessor_Abstract*
  * @param Id		The message object id that corresponds to the message to be sent
  * @param msgData	The actual message data that was received
  */
-bool ProcessingEngineNode::SendMessageTo(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
+bool ProcessingEngineNode::SendMessageTo(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) const
 {
 	if (m_typeAProtocols.count(PId))
-		return m_typeAProtocols[PId]->SendMessage(Id, msgData);
+		return m_typeAProtocols.at(PId)->SendMessage(Id, msgData);
 	else if (m_typeBProtocols.count(PId))
-		return m_typeBProtocols[PId]->SendMessage(Id, msgData);
+		return m_typeBProtocols.at(PId)->SendMessage(Id, msgData);
 	else
 		return false;
 }

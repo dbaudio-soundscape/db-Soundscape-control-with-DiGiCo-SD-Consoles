@@ -61,6 +61,13 @@ public:
 	virtual bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) = 0;
 
 protected:
+	const ProcessingEngineNode* GetParentNode();
+	void						SetMode(ObjectHandlingMode mode);
+	NodeId						GetParentNodeId();
+	const Array<ProtocolId>&	GetProtocolAIds();
+	const Array<ProtocolId>&	GetProtocolBIds();
+
+private:
 	ProcessingEngineNode*	m_parentNode;			/**< The parent node object. Needed for e.g. triggering receive notifications. */
 	ObjectHandlingMode		m_mode;					/**< Mode identifier enabling resolving derived instance type. */
 	NodeId					m_parentNodeId;			/**< The id of the objects' parent node. */
@@ -130,6 +137,12 @@ public:
 
 	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
+protected:
+	int GetProtoChCntA();
+	int GetProtoChCntB();
+
+	ProtocolId MapObjectAddressing(ProtocolId PId, RemoteObjectMessageData& msgData);
+
 private:
 	int m_protoChCntA;	/**< Channel count configuration value that is to be expected per protocol type A. */
 	int m_protoChCntB;	/**< Channel count configuration value that is to be expected per protocol type B. */
@@ -150,12 +163,13 @@ public:
 
 	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
-private:
+protected:
 	bool IsChangedDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData);
 	void SetCurrentDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData);
-	
+
+private:
 	std::map<RemoteObjectIdentifier, std::map<RemoteObjectAddressing, RemoteObjectMessageData>>	m_currentValues;	/**< Hash of current value data to use to compare to incoming data regarding value changes. */
-	double m_precision;																								/**< Value precision to use for processing. */
+	float m_precision;																								/**< Value precision to use for processing. */
 };
 
 /**
@@ -185,5 +199,27 @@ public:
 	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
 protected:
+
+};
+
+/**
+ * Class Mux_nA_to_mB_withValFilter is a class for multiplexing n channels of protocols typeA
+ * to m channels of protocols typeB combined with filtering to only forward changed object values.
+ */
+class Mux_nA_to_mB_withValFilter : public Forward_only_valueChanges
+{
+public:
+	Mux_nA_to_mB_withValFilter(ProcessingEngineNode* parentNode);
+	~Mux_nA_to_mB_withValFilter();
+
+	void SetObjectHandlingConfiguration(const ProcessingEngineConfig& config, NodeId NId) override;
+
+	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
+private:
+	ProtocolId MapObjectAddressing(ProtocolId PId, RemoteObjectMessageData &msgData);
+
+	int m_protoChCntA; /**< Channel count configuration value that is to be expected per protocol type A. */
+	int m_protoChCntB; /**< Channel count configuration value that is to be expected per protocol type B. */
 
 };

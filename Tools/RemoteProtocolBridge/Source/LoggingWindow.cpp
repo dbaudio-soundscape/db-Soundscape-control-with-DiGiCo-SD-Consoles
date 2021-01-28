@@ -103,7 +103,7 @@ void PlotComponent::timerCallback()
 {
 	// accumulate all protocol msgs as well as handle individual protocol msg counts
 	int msgCount = 0;
-	for (const std::pair<ProtocolId, int> &msgCountPerProtocol : m_currentMsgPerProtocol)
+	for (const std::pair<const ProtocolId, int> &msgCountPerProtocol : m_currentMsgPerProtocol)
 	{
 		if (m_plotData[int(msgCountPerProtocol.first)].size() != m_plotData[NODE].size())
 			m_plotData[int(msgCountPerProtocol.first)].resize(m_plotData[NODE].size());
@@ -193,7 +193,7 @@ void PlotComponent::paint(Graphics &g)
 		legendPosX += 2 * ml;
 		g.drawLine(Line<float>(legendPosX, mm + ms, legendPosX + ml, mm + ms));
 		legendPosX += 3 * ml;
-		for (const std::pair<int, Colour> &protoCol : m_protocolPlotColours)
+		for (const std::pair<const int, Colour> &protoCol : m_protocolPlotColours)
 		{
 			g.setColour(protoCol.second);
 			g.drawText("PId"+String(protoCol.first), Rectangle<float>(legendPosX, mm, 2 * ml, mm), Justification::centred, true);
@@ -264,7 +264,7 @@ LoggingComponent::LoggingComponent()
 	m_LogModeDrop->addItem(LogModeToString(LM_Graph), LM_Graph);
 	m_LogModeDrop->setColour(Label::textColourId, Colours::white);
 	m_LogModeDrop->setJustificationType(Justification::right);
-	SetLoggingMode(LM_Text);
+	SetLoggingMode(LM_Graph);
 
 	m_closeButton = std::make_unique<TextButton>("Close");
 	addAndMakeVisible(m_closeButton.get());

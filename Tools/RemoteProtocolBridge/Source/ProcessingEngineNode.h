@@ -74,7 +74,7 @@ public:
 
 	NodeId GetId();
 
-	bool SendMessageTo(ProtocolId PId, RemoteObjectIdentifier id, RemoteObjectMessageData& msgData);
+	bool SendMessageTo(ProtocolId PId, RemoteObjectIdentifier id, RemoteObjectMessageData& msgData) const;
 
 	bool Start();
 	bool Stop();

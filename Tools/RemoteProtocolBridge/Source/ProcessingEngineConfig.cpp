@@ -875,7 +875,7 @@ void ProcessingEngineConfig::AddDefaultNode()
 	NodeData node;
 
 	node.Id = GetNextUniqueId();
-	node.ObjectHandling.Mode = OHM_Forward_only_valueChanges;
+	node.ObjectHandling.Mode = OHM_Bypass;
 	node.ObjectHandling.ACnt = 0;
 	node.ObjectHandling.BCnt = 0;
 	node.ObjectHandling.Prec = 0.001;
@@ -1134,6 +1134,8 @@ String ProcessingEngineConfig::ObjectHandlingModeToString(ObjectHandlingMode ohm
 		return "Forward data only (A->B)";
 	case OHM_Reverse_B_to_A_only:
 		return "Reverse data only (B->A)";
+	case OHM_Mux_nA_to_mB_withValFilter:
+		return "Multiplex mult. n-ch. A to m-ch. B (fwd. val. changes only)";
 	default:
 		return "";
 	}
@@ -1156,6 +1158,8 @@ ObjectHandlingMode ProcessingEngineConfig::ObjectHandlingModeFromString(String m
 		return OHM_Forward_A_to_B_only;
 	if (mode == ObjectHandlingModeToString(OHM_Reverse_B_to_A_only))
 		return OHM_Reverse_B_to_A_only;
+	if (mode == ObjectHandlingModeToString(OHM_Mux_nA_to_mB_withValFilter))
+		return OHM_Mux_nA_to_mB_withValFilter;
 
 	return OHM_Invalid;
 }

@@ -84,16 +84,6 @@ void ObjectDataHandling_Abstract::SetObjectHandlingConfiguration(const Processin
 }
 
 /**
- * Getter for the mode of this objectdata handling object
- *
- * @return The mode of this objectdata handling object
- */
-ObjectHandlingMode ObjectDataHandling_Abstract::GetMode()
-{
-	return m_mode;
-}
-
-/**
  * Method to add a new id of a protocol of typeA to internal list of typeA protocolIds
  *
  * @param PAId	Protocol Id of typeA protocol to add.
@@ -121,6 +111,60 @@ void ObjectDataHandling_Abstract::ClearProtocolIds()
 	m_protocolAIds.clear();
 }
 
+/**
+ * Getter for the parentNode member.
+ * @return The parentNode pointer, can be nullptr.
+ */
+const ProcessingEngineNode* ObjectDataHandling_Abstract::GetParentNode()
+{
+	return m_parentNode;
+}
+
+/**
+ * Getter for the mode member.
+ * @return The object handling mode of this object.
+ */
+ObjectHandlingMode ObjectDataHandling_Abstract::GetMode()
+{
+	return m_mode;
+}
+
+/**
+ * Setter for the mode member.
+ * @param mode The object handling mode to set for this object.
+ */
+void  ObjectDataHandling_Abstract::SetMode(ObjectHandlingMode mode)
+{
+	m_mode = mode;
+}
+
+/**
+ * Getter for the parent node id member.
+ * @return The parentNode Id.
+ */
+NodeId ObjectDataHandling_Abstract::GetParentNodeId()
+{
+	return m_parentNodeId;
+}
+
+/**
+ * Getter for the type a protocols array member.
+ * @return The type a protocols.
+ */
+const Array<ProtocolId>& ObjectDataHandling_Abstract::GetProtocolAIds()
+{
+	return m_protocolAIds;
+}
+
+/**
+ * Getter for the type b protocols array member.
+ * @return The type b protocols.
+ */
+const Array<ProtocolId>& ObjectDataHandling_Abstract::GetProtocolBIds()
+{
+	return m_protocolBIds;
+}
+
 
 // **************************************************************************************
 //    class BypassHandling
@@ -133,7 +177,7 @@ void ObjectDataHandling_Abstract::ClearProtocolIds()
 BypassHandling::BypassHandling(ProcessingEngineNode* parentNode)
 	: ObjectDataHandling_Abstract(parentNode)
 {
-	m_mode = ObjectHandlingMode::OHM_Bypass;
+	SetMode(ObjectHandlingMode::OHM_Bypass);
 }
 
 /**
@@ -155,23 +199,24 @@ bool BypassHandling::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectI
 {
 	bool sendSuccess = false;
 
-	if (m_parentNode)
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode)
 	{
-		if (m_protocolAIds.contains(PId))
+		if (GetProtocolAIds().contains(PId))
 		{
 			sendSuccess = true;
 			// the message was received by a typeA protocol -> forward it to all typeB protocols
-			int typeBProtocolCount = m_protocolBIds.size();
+			int typeBProtocolCount = GetProtocolBIds().size();
 			for (int i = 0; i < typeBProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolBIds[i], Id, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolBIds()[i], Id, msgData);
 		}
-		else if (m_protocolBIds.contains(PId))
+		else if (GetProtocolBIds().contains(PId))
 		{
 			sendSuccess = true;
 			// the message was received by a typeB protocol
-			int typeAProtocolCount = m_protocolAIds.size();
+			int typeAProtocolCount = GetProtocolAIds().size();
 			for (int i = 0; i < typeAProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolAIds[i], Id, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolAIds()[i], Id, msgData);
 		}
 	}
 
@@ -190,7 +235,7 @@ bool BypassHandling::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectI
 Remap_A_X_Y_to_B_XY_Handling::Remap_A_X_Y_to_B_XY_Handling(ProcessingEngineNode* parentNode)
 	: ObjectDataHandling_Abstract(parentNode)
 {
-	m_mode = ObjectHandlingMode::OHM_Remap_A_X_Y_to_B_XY;
+	SetMode(ObjectHandlingMode::OHM_Remap_A_X_Y_to_B_XY);
 }
 
 /**
@@ -210,9 +255,10 @@ Remap_A_X_Y_to_B_XY_Handling::~Remap_A_X_Y_to_B_XY_Handling()
  */
 bool Remap_A_X_Y_to_B_XY_Handling::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
 {
-	if (m_parentNode)
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode)
 	{
-		if (m_protocolAIds.contains(PId))
+		if (GetProtocolAIds().contains(PId))
 		{
 			// the message was received by a typeA protocol
 
@@ -267,14 +313,14 @@ bool Remap_A_X_Y_to_B_XY_Handling::OnReceivedMessageFromProtocol(ProtocolId PId,
 
 			// Send to all typeB protocols
 			bool sendSuccess = true;
-			int typeBProtocolCount = m_protocolBIds.size();
+			int typeBProtocolCount = GetProtocolBIds().size();
 			for (int i = 0; i < typeBProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolBIds[i], ObjIdToSend, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolBIds()[i], ObjIdToSend, msgData);
 
 			return sendSuccess;
 			
 		}
-		if (m_protocolBIds.contains(PId))
+		if (GetProtocolBIds().contains(PId))
 		{
 			if (Id == ROI_SoundObject_Position_XY)
 			{
@@ -298,14 +344,14 @@ bool Remap_A_X_Y_to_B_XY_Handling::OnReceivedMessageFromProtocol(ProtocolId PId,
 
 				// Send to all typeA protocols
 				bool sendSuccess = true;
-				int typeAProtocolCount = m_protocolAIds.size();
+				int typeAProtocolCount = GetProtocolAIds().size();
 				for (int i = 0; i < typeAProtocolCount; ++i)
 				{
 					msgData.payload = &newXVal;
-					sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolAIds[i], ROI_SoundObject_Position_X, msgData);
+					sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolAIds()[i], ROI_SoundObject_Position_X, msgData);
 
 					msgData.payload = &newYVal;
-					sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolAIds[i], ROI_SoundObject_Position_Y, msgData);
+					sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolAIds()[i], ROI_SoundObject_Position_Y, msgData);
 				}
 
 				return sendSuccess;
@@ -314,9 +360,9 @@ bool Remap_A_X_Y_to_B_XY_Handling::OnReceivedMessageFromProtocol(ProtocolId PId,
 			{
 				// Send to all typeA protocols
 				bool sendSuccess = true;
-				int typeAProtocolCount = m_protocolAIds.size();
+				int typeAProtocolCount = GetProtocolAIds().size();
 				for (int i = 0; i < typeAProtocolCount; ++i)
-					sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolAIds[i], Id, msgData);
+					sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolAIds()[i], Id, msgData);
 
 				return sendSuccess;
 			}
@@ -338,7 +384,7 @@ bool Remap_A_X_Y_to_B_XY_Handling::OnReceivedMessageFromProtocol(ProtocolId PId,
 Mux_nA_to_mB::Mux_nA_to_mB(ProcessingEngineNode* parentNode)
 	: ObjectDataHandling_Abstract(parentNode)
 {
-	m_mode			= ObjectHandlingMode::OHM_Mux_nA_to_mB;
+	SetMode(ObjectHandlingMode::OHM_Mux_nA_to_mB);
 	m_protoChCntA	= 1;
 	m_protoChCntB	= 1;
 }
@@ -374,37 +420,93 @@ void Mux_nA_to_mB::SetObjectHandlingConfiguration(const ProcessingEngineConfig& 
  */
 bool Mux_nA_to_mB::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
 {
-	if (m_parentNode && m_protoChCntA>0 && m_protoChCntB>0)
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode && m_protoChCntA>0 && m_protoChCntB>0)
 	{
-		if (m_protocolAIds.contains(PId))
+		if (GetProtocolAIds().contains(PId))
 		{
-			jassert(msgData.addrVal.first <= m_protoChCntA);
-			int absChNr = m_protocolAIds.indexOf(PId) * m_protoChCntA + msgData.addrVal.first;
-			int protocolBIndex = absChNr / (m_protoChCntB + 1);
-			int16 chForB = int16(absChNr % m_protoChCntB);
-			if (chForB == 0)
-				chForB = m_protoChCntB;
-
-			msgData.addrVal.first = chForB;
-			if (m_protocolBIds.size() >= protocolBIndex + 1)
-				return m_parentNode->SendMessageTo(m_protocolBIds[protocolBIndex], Id, msgData);
+			ProtocolId protocolBId = MapObjectAddressing(PId, msgData);
+			if (protocolBId != INVALID_ADDRESS_VALUE)
+				return parentNode->SendMessageTo(protocolBId, Id, msgData);
+			else
+				return false;
 		}
-		else if (m_protocolBIds.contains(PId))
+		else if (GetProtocolBIds().contains(PId))
 		{
-			jassert(msgData.addrVal.first <= m_protoChCntB);
-			int absChNr = m_protocolBIds.indexOf(PId) * m_protoChCntB + msgData.addrVal.first;
-			int protocolAIndex = absChNr / (m_protoChCntA + 1);
-			int16 chForA = int16(absChNr % m_protoChCntA);
-			if (chForA == 0)
-				chForA = m_protoChCntA;
-
-			msgData.addrVal.first = chForA;
-			if (m_protocolAIds.size() >= protocolAIndex + 1)
-				return m_parentNode->SendMessageTo(m_protocolAIds[protocolAIndex], Id, msgData);
+			ProtocolId protocolAId = MapObjectAddressing(PId, msgData);
+			if (protocolAId != INVALID_ADDRESS_VALUE)
+				return parentNode->SendMessageTo(protocolAId, Id, msgData);
+			else
+				return false;
 		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
+/**
+ * Getter for the chCntA member.
+ * @return The channel count value.
+ */
+int Mux_nA_to_mB::GetProtoChCntA()
+{
+	return m_protoChCntA;
+}
+
+/**
+ * Getter for the chCntB member.
+ * @return The channel count value.
+ */
+int Mux_nA_to_mB::GetProtoChCntB()
+{
+	return m_protoChCntB;
+}
+
+/**
+ * Method to do the mapping of addressing value depending on configured multiplexing settings.
+ *
+ * @param PId		The id of the protocol that received the data
+ * @param msgData	The actual message value/content data
+ * @return	The protocol index the mapped value shall be sent to
+ */
+ProtocolId Mux_nA_to_mB::MapObjectAddressing(ProtocolId PId, RemoteObjectMessageData& msgData)
+{
+	if (GetProtocolAIds().contains(PId))
+	{
+		jassert(msgData.addrVal.first <= m_protoChCntA);
+		int absChNr = GetProtocolAIds().indexOf(PId) * m_protoChCntA + msgData.addrVal.first;
+		int protocolBIndex = absChNr / (m_protoChCntB + 1);
+		int16 chForB = static_cast<int16>(absChNr % m_protoChCntB);
+		if (chForB == 0)
+			chForB = static_cast<int16>(m_protoChCntB);
+
+		msgData.addrVal.first = chForB;
+
+		if (GetProtocolBIds().size() >= protocolBIndex + 1)
+			return GetProtocolBIds()[protocolBIndex];
+		else
+			return static_cast<ProtocolId>(INVALID_ADDRESS_VALUE);
+	}
+	else if (GetProtocolBIds().contains(PId))
+	{
+		jassert(msgData.addrVal.first <= m_protoChCntB);
+		int absChNr = GetProtocolBIds().indexOf(PId) * m_protoChCntB + msgData.addrVal.first;
+		int protocolAIndex = absChNr / (m_protoChCntA + 1);
+		int16 chForA = static_cast<int16>(absChNr % m_protoChCntA);
+		if (chForA == 0)
+			chForA = static_cast<int16>(m_protoChCntA);
+
+		msgData.addrVal.first = chForA;
+
+		if (GetProtocolAIds().size() >= protocolAIndex + 1)
+			return GetProtocolAIds()[protocolAIndex];
+		else
+			return static_cast<ProtocolId>(INVALID_ADDRESS_VALUE);
 	}
 
-	return false;
+	return static_cast<ProtocolId>(INVALID_ADDRESS_VALUE);
 }
 
 
@@ -419,7 +521,7 @@ bool Mux_nA_to_mB::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIde
 Forward_only_valueChanges::Forward_only_valueChanges(ProcessingEngineNode* parentNode)
 	: ObjectDataHandling_Abstract(parentNode)
 {
-	m_mode = ObjectHandlingMode::OHM_Forward_only_valueChanges;
+	SetMode(ObjectHandlingMode::OHM_Forward_only_valueChanges);
 	m_precision = 0.001f;
 }
 
@@ -453,7 +555,7 @@ void Forward_only_valueChanges::SetObjectHandlingConfiguration(const ProcessingE
 {
 	ObjectDataHandling_Abstract::SetObjectHandlingConfiguration(config, NId);
 
-	m_precision = config.GetObjectHandlingData(NId).Prec;
+	m_precision = static_cast<float>(config.GetObjectHandlingData(NId).Prec);
 }
 
 /**
@@ -466,29 +568,30 @@ void Forward_only_valueChanges::SetObjectHandlingConfiguration(const ProcessingE
  */
 bool Forward_only_valueChanges::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
 {
-	if (m_parentNode)
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode)
 	{
 		if (!IsChangedDataValue(Id, msgData))
 			return false;
 
-		if (m_protocolAIds.contains(PId))
+		if (GetProtocolAIds().contains(PId))
 		{
 			// Send to all typeB protocols
 			bool sendSuccess = true;
-			int typeBProtocolCount = m_protocolBIds.size();
+			int typeBProtocolCount = GetProtocolBIds().size();
 			for (int i = 0; i < typeBProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolBIds[i], Id, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolBIds()[i], Id, msgData);
 
 			return sendSuccess;
 
 		}
-		if (m_protocolBIds.contains(PId))
+		if (GetProtocolBIds().contains(PId))
 		{
 			// Send to all typeA protocols
 			bool sendSuccess = true;
-			int typeAProtocolCount = m_protocolAIds.size();
+			int typeAProtocolCount = GetProtocolAIds().size();
 			for (int i = 0; i < typeAProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolAIds[i], Id, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolAIds()[i], Id, msgData);
 
 			return sendSuccess;
 		}
@@ -513,7 +616,7 @@ bool Forward_only_valueChanges::IsChangedDataValue(const RemoteObjectIdentifier 
 	bool isChangedDataValue = false;
 
 	// if our hash does not yet contain our ROI, initialize it
-	if ((m_currentValues.count(Id) == 0) || (m_currentValues.at(Id).count(msgData.addrVal)== 0))
+	if ((m_currentValues.count(Id) == 0) || (m_currentValues.at(Id).count(msgData.addrVal) == 0))
 	{
 		isChangedDataValue = true;
 	}
@@ -541,20 +644,26 @@ bool Forward_only_valueChanges::IsChangedDataValue(const RemoteObjectIdentifier 
 				{
 				case ROVT_INT:
 					{
+					// convert payload to correct pointer type
 					int *refVal = static_cast<int*>(refData);
 					int *newVal = static_cast<int*>(newData);
-					referencePrecisionValue = static_cast<int>(*refVal);
-					newPrecisionValue = static_cast<int>(*newVal);
+					// grab actual value
+					referencePrecisionValue = *refVal;
+					newPrecisionValue = *newVal;
+					// increase pointer to next value (to access it in next valCount loop iteration)
 					refData = refVal+1;
 					newData = newVal+1;
 					}
 					break;
 				case ROVT_FLOAT:
 					{
+					// convert payload to correct pointer type
 					float *refVal = static_cast<float*>(refData);
-					float *newVal = static_cast<float*>(newData);
-					referencePrecisionValue = static_cast<int>((*refVal) / m_precision);
-					newPrecisionValue = static_cast<int>((*newVal) / m_precision);
+					float *newVal = static_cast<float *>(newData);
+					// grab actual value and apply precision to get a comparable value
+					referencePrecisionValue = static_cast<int>(std::roundf(*refVal / m_precision));
+					newPrecisionValue		= static_cast<int>(std::roundf(*newVal / m_precision));
+					// increase pointer to next value (to access it in next valCount loop iteration)
 					refData = refVal+1;
 					newData = newVal+1;
 					}
@@ -593,13 +702,20 @@ bool Forward_only_valueChanges::IsChangedDataValue(const RemoteObjectIdentifier 
  */
 void Forward_only_valueChanges::SetCurrentDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData)
 {
-	if ((m_currentValues.count(Id) == 0) || (m_currentValues.at(Id).count(msgData.addrVal) == 0) || (m_currentValues.at(Id).at(msgData.addrVal).payloadSize != msgData.payloadSize))
+	RemoteObjectAddressing dataValAddr = msgData.addrVal;
+
+	// Check if the new data value addressing is currently not present in internal hash
+	// or if it differs in its value size and needs to be reinitialized
+	if((m_currentValues.count(Id) == 0) || (m_currentValues.at(Id).count(dataValAddr) == 0) || 
+		(m_currentValues.at(Id).at(dataValAddr).payloadSize != msgData.payloadSize))
 	{
-		if ((m_currentValues.count(Id) != 0) && (m_currentValues.at(Id).count(msgData.addrVal) != 0) && (m_currentValues.at(Id).at(msgData.addrVal).payloadSize != msgData.payloadSize))
+		// If the data value exists, but has wrong size, reinitialize it
+		if((m_currentValues.count(Id) != 0) && (m_currentValues.at(Id).count(dataValAddr) != 0) && 
+			(m_currentValues.at(Id).at(dataValAddr).payloadSize != msgData.payloadSize))
 		{
-			delete m_currentValues.at(Id).at(msgData.addrVal).payload;
-			m_currentValues.at(Id).at(msgData.addrVal).payload = nullptr;
-			m_currentValues.at(Id).at(msgData.addrVal).payloadSize = 0;
+			delete m_currentValues.at(Id).at(dataValAddr).payload;
+			m_currentValues.at(Id).at(dataValAddr).payload = nullptr;
+			m_currentValues.at(Id).at(dataValAddr).payloadSize = 0;
 		}
 	
 		RemoteObjectMessageData dataCopy = msgData;
@@ -607,15 +723,15 @@ void Forward_only_valueChanges::SetCurrentDataValue(const RemoteObjectIdentifier
 		dataCopy.payload = new unsigned char[msgData.payloadSize];
 		memcpy(dataCopy.payload, msgData.payload, msgData.payloadSize);
 	
-		m_currentValues[Id][msgData.addrVal] = dataCopy;
+		m_currentValues[Id][dataValAddr] = dataCopy;
 	}
 	else
 	{
 		// do not copy entire data struct, since we need to keep our payload ptr
-		m_currentValues[Id][msgData.addrVal].addrVal = msgData.addrVal;
-		m_currentValues[Id][msgData.addrVal].valCount = msgData.valCount;
-		m_currentValues[Id][msgData.addrVal].valType = msgData.valType;
-		memcpy(m_currentValues[Id][msgData.addrVal].payload, msgData.payload, msgData.payloadSize);
+		m_currentValues.at(Id).at(dataValAddr).addrVal = msgData.addrVal;
+		m_currentValues.at(Id).at(dataValAddr).valCount = msgData.valCount;
+		m_currentValues.at(Id).at(dataValAddr).valType = msgData.valType;
+		memcpy(m_currentValues.at(Id).at(dataValAddr).payload, msgData.payload, msgData.payloadSize);
 	}
 }
 
@@ -631,7 +747,7 @@ void Forward_only_valueChanges::SetCurrentDataValue(const RemoteObjectIdentifier
 Forward_A_to_B_only::Forward_A_to_B_only(ProcessingEngineNode* parentNode)
 	: ObjectDataHandling_Abstract(parentNode)
 {
-	m_mode = ObjectHandlingMode::OHM_Forward_A_to_B_only;
+	SetMode(ObjectHandlingMode::OHM_Forward_A_to_B_only);
 }
 
 /**
@@ -653,17 +769,18 @@ bool Forward_A_to_B_only::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteOb
 {
 	bool sendSuccess = false;
 
-	if (m_parentNode)
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode)
 	{
-		if (m_protocolAIds.contains(PId))
+		if (GetProtocolAIds().contains(PId))
 		{
 			sendSuccess = true;
 			// the message was received by a typeA protocol -> forward it to all typeB protocols
-			int typeBProtocolCount = m_protocolBIds.size();
+			int typeBProtocolCount = GetProtocolBIds().size();
 			for (int i = 0; i < typeBProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolBIds[i], Id, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolBIds()[i], Id, msgData);
 		}
-		else if (m_protocolBIds.contains(PId))
+		else if (GetProtocolBIds().contains(PId))
 		{
 			sendSuccess = true;
 			// the message was received by a typeB protocol, which we do not want to forward in this OHM
@@ -685,7 +802,7 @@ bool Forward_A_to_B_only::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteOb
 Reverse_B_to_A_only::Reverse_B_to_A_only(ProcessingEngineNode* parentNode)
 	: ObjectDataHandling_Abstract(parentNode)
 {
-	m_mode = ObjectHandlingMode::OHM_Reverse_B_to_A_only;
+	SetMode(ObjectHandlingMode::OHM_Reverse_B_to_A_only);
 }
 
 /**
@@ -707,22 +824,143 @@ bool Reverse_B_to_A_only::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteOb
 {
 	bool sendSuccess = false;
 
-	if (m_parentNode)
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode)
 	{
-		if (m_protocolAIds.contains(PId))
+		if (GetProtocolAIds().contains(PId))
 		{
 			sendSuccess = true;
 			// the message was received by a typeA protocol, which we do not want to forward in this OHM
 		}
-		else if (m_protocolBIds.contains(PId))
+		else if (GetProtocolBIds().contains(PId))
 		{
 			sendSuccess = true;
 			// the message was received by a typeB protocol
-			int typeAProtocolCount = m_protocolAIds.size();
+			int typeAProtocolCount = GetProtocolAIds().size();
 			for (int i = 0; i < typeAProtocolCount; ++i)
-				sendSuccess = sendSuccess && m_parentNode->SendMessageTo(m_protocolAIds[i], Id, msgData);
+				sendSuccess = sendSuccess && parentNode->SendMessageTo(GetProtocolAIds()[i], Id, msgData);
 		}
 	}
 
 	return sendSuccess;
+}
+
+
+// **************************************************************************************
+//    class Mux_nA_to_mB_withValFilter
+// **************************************************************************************
+/**
+ * Constructor of class Mux_nA_to_mB_withValFilter.
+ *
+ * @param parentNode	The objects' parent node that is used by derived objects to forward received message contents to.
+ */
+Mux_nA_to_mB_withValFilter::Mux_nA_to_mB_withValFilter(ProcessingEngineNode* parentNode)
+	: Forward_only_valueChanges(parentNode)
+{
+	SetMode(ObjectHandlingMode::OHM_Mux_nA_to_mB_withValFilter);
+	m_protoChCntA = 1;
+	m_protoChCntB = 1;
+}
+
+/**
+ * Destructor
+ */
+Mux_nA_to_mB_withValFilter::~Mux_nA_to_mB_withValFilter()
+{
+}
+
+/**
+ * Reimplemented to set the custom parts from configuration for the datahandling object.
+ *
+ * @param config	The overall configuration object that can be used to query config data from
+ * @param NId		The node id of the parent node this data handling object is child of (needed to access data from config)
+ */
+void Mux_nA_to_mB_withValFilter::SetObjectHandlingConfiguration(const ProcessingEngineConfig& config, NodeId NId)
+{
+	Forward_only_valueChanges::SetObjectHandlingConfiguration(config, NId);
+
+	m_protoChCntA = config.GetObjectHandlingData(NId).ACnt;
+	m_protoChCntB = config.GetObjectHandlingData(NId).BCnt;
+}
+
+/**
+ * Method to be called by parent node on receiving data from node protocol with given id
+ *
+ * @param PId		The id of the protocol that received the data
+ * @param Id		The object id to send a message for
+ * @param msgData	The actual message value/content data
+ * @return	True if successful sent/forwarded, false if not
+ */
+bool Mux_nA_to_mB_withValFilter::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
+{
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (parentNode && m_protoChCntA > 0 && m_protoChCntB > 0)
+	{
+		if (ObjectDataHandling_Abstract::GetProtocolAIds().contains(PId))
+		{
+			ProtocolId protocolBId = MapObjectAddressing(PId, msgData);
+
+			if (protocolBId != INVALID_ADDRESS_VALUE && IsChangedDataValue(Id, msgData))
+				return parentNode->SendMessageTo(protocolBId, Id, msgData);
+			else
+				return false;
+		}
+		else if (ObjectDataHandling_Abstract::GetProtocolBIds().contains(PId))
+		{
+			ProtocolId protocolAId = MapObjectAddressing(PId, msgData);
+			if (protocolAId != INVALID_ADDRESS_VALUE && IsChangedDataValue(Id, msgData))
+				return parentNode->SendMessageTo(protocolAId, Id, msgData);
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
+/**
+ * Method to do the mapping of addressing value depending on configured multiplexing settings.
+ *
+ * @param PId		The id of the protocol that received the data
+ * @param msgData	The actual message value/content data
+ * @return	The protocol index the mapped value shall be sent to
+ */
+ProtocolId Mux_nA_to_mB_withValFilter::MapObjectAddressing(ProtocolId PId, RemoteObjectMessageData &msgData)
+{
+	if(GetProtocolAIds().contains(PId))
+	{
+		jassert(msgData.addrVal.first <= m_protoChCntA);
+		int absChNr		   = GetProtocolAIds().indexOf(PId) * m_protoChCntA + msgData.addrVal.first;
+		int protocolBIndex = absChNr / (m_protoChCntB + 1);
+		int16 chForB	   = static_cast<int16>(absChNr % m_protoChCntB);
+		if(chForB == 0)
+			chForB = static_cast<int16>(m_protoChCntB);
+
+		msgData.addrVal.first = chForB;
+
+		if(GetProtocolBIds().size() >= protocolBIndex + 1)
+			return GetProtocolBIds()[protocolBIndex];
+		else
+			return static_cast<ProtocolId>(INVALID_ADDRESS_VALUE);
+	}
+	else if(GetProtocolBIds().contains(PId))
+	{
+		jassert(msgData.addrVal.first <= m_protoChCntB);
+		int absChNr		   = GetProtocolBIds().indexOf(PId) * m_protoChCntB + msgData.addrVal.first;
+		int protocolAIndex = absChNr / (m_protoChCntA + 1);
+		int16 chForA	   = static_cast<int16>(absChNr % m_protoChCntA);
+		if(chForA == 0)
+			chForA = static_cast<int16>(m_protoChCntA);
+
+		msgData.addrVal.first = chForA;
+
+		if(GetProtocolAIds().size() >= protocolAIndex + 1)
+			return GetProtocolAIds()[protocolAIndex];
+		else
+			return static_cast<ProtocolId>(INVALID_ADDRESS_VALUE);
+	}
+
+	return static_cast<ProtocolId>(INVALID_ADDRESS_VALUE);
 }
