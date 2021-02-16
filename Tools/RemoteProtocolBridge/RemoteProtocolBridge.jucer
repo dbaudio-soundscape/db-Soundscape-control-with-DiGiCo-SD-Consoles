@@ -2,7 +2,7 @@
 
 <JUCERPROJECT name="RemoteProtocolBridge" projectType="guiapp" companyName="d&amp;b audiotechnik GmbH &amp; Co. KG"
               companyWebsite="www.dbaudio.com" companyEmail="support@dbaudio.com"
-              version="0.4.5" bundleIdentifier="com.dbaudio.RemoteProtocolBridge"
+              version="0.4.6" bundleIdentifier="com.dbaudio.RemoteProtocolBridge"
               companyCopyright="Copyright (c) by d&amp;b audiotechnik GmbH &amp; Co. KG; all rights reserved."
               id="BLZw0l" jucerFormatVersion="1">
   <MAINGROUP id="NrfEgH" name="RemoteProtocolBridge">

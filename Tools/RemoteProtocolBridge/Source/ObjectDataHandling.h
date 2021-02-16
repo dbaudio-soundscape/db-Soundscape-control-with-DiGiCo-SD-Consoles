@@ -164,8 +164,8 @@ public:
 	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
 protected:
-	bool IsChangedDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData);
-	void SetCurrentDataValue(const RemoteObjectIdentifier Id, const RemoteObjectMessageData& msgData);
+	bool IsChangedDataValue(const RemoteObjectIdentifier Id, const RemoteObjectAddressing& roAddr, const RemoteObjectMessageData& msgData, bool setAsNewCurrentData = true);
+	void SetCurrentDataValue(const RemoteObjectIdentifier Id, const RemoteObjectAddressing& roAddr, const RemoteObjectMessageData& msgData);
 
 private:
 	std::map<RemoteObjectIdentifier, std::map<RemoteObjectAddressing, RemoteObjectMessageData>>	m_currentValues;	/**< Hash of current value data to use to compare to incoming data regarding value changes. */
@@ -217,7 +217,8 @@ public:
 	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
 private:
-	ProtocolId MapObjectAddressing(ProtocolId PId, RemoteObjectMessageData &msgData);
+	std::pair<juce::Array<ProtocolId>, int16> GetTargetProtocolsAndSource(ProtocolId PId, const RemoteObjectMessageData &msgData);
+	RemoteObjectAddressing GetMappedOriginAddressing(ProtocolId PId, const RemoteObjectMessageData& msgData);
 
 	int m_protoChCntA; /**< Channel count configuration value that is to be expected per protocol type A. */
 	int m_protoChCntB; /**< Channel count configuration value that is to be expected per protocol type B. */
