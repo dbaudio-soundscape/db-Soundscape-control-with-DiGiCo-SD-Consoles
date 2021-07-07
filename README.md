@@ -1,12 +1,27 @@
 # d&b Soundscape control with DiGiCo SD Consoles - Generic OSC 
 
-Copyright (C) 2017-2020, d&b audiotechnik GmbH & Co. KG
+Copyright (C) 2017-2021, d&b audiotechnik GmbH & Co. KG
 
 By downloading software from this site, you agree to the terms and conditions described in the [End-User License Agreement](EULA.md). If you do not agree with such terms and conditions do not download the software.
 
 ## Latest binaries can be downloaded here: [LATEST RELEASE](../../releases/latest)
 
 ---
+
+<a name="toc" />
+
+## Table of contents
+
+* [Introduction](#introduction)
+* [Features](#features)
+* [Requirements](#requirements)
+* [Setting up Generic OSC for d&b Soundscape (stand alone)](#setupDigico)
+* [Enabling bidirectional communication for Generic OSC for Soundscape using the d&b Software bridge](#setupDigicoWithPollingBridge)
+* [Additional functions](#additionalFunctions)
+* [Known issues](#knownIssues)
+
+
+<a name="introduction" />
 
 ## Introduction
 
@@ -27,6 +42,8 @@ More information about the Generic OSC feature is provided on the website or fro
 For more info about the d&b Soundscape system and concept, please visit:
 www.dbaudio.com and www.dbsoundscape.com.
 
+
+<a name="features" />
 
 ## Features 
 
@@ -52,6 +69,8 @@ The d&b Software bridge constantly polls the values of the parameters described 
 As a result, a flexible workflow is maintained even in complex setups.
 
 
+<a name="requirements" />
+
 ## Requirements
 
 * Any DiGiCo SD Console with Generic OSC enabled.
@@ -63,17 +82,21 @@ As a result, a flexible workflow is maintained even in complex setups.
 OSC documentation of the DS100 which is available for download from the related DS100 product page at www.dbaudio.com.
 
 
+<a name="setupDigico" />
+
 ## Setting up Generic OSC for d&b Soundscape (stand alone)
 
 ### Set up Generic OSC and connect with DS100:
 * On the Master screen, select “Setup” and go to “External Control”.
 
-[Picture]
+![DiGiCo Master Screen](Resources/Documentation/Images/01.png "DiGiCo Master Screen")
 
 ### Switch on Generic OSC and select the correct mode for d&b Soundscape control
 * Switch Enable External Control to “YES”.
 * Switch Input Channel Controllers to “OSC-generic”.
 * Switch on “Suppress OSC retransmit” & “Recall with session” if desired …
+
+![DiGiCo External Control](Resources/Documentation/Images/02.png "DiGiCo External Control")
 
 ### Enter the parameters to establish the connection with the DS100:
 Ensure the DS100 is connected to the same Ethernet network as your Console and their IP addresses and subnet masks are compatible.
@@ -85,38 +108,42 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
-[Picture]
+![DiGiCo External Control Detail](Resources/Documentation/Images/03.png "DiGiCo External Control Detail")
 
 ### Assign the OSC commands to the rotaries and switches of the External Control window according to how they should control the d&b Soundscape parameters:
 * Click the ”Costumise” button to display an assignment list for 8 rotaries.
 * Assign the parameters of En-Scene and En-Space to the rotaries by entering the OSC commands and values in the OSC column.
 
-[Table]
-[Picture]
+![DiGiCo OSC Cmd Assign](Resources/Documentation/Images/04.png "DiGiCo OSC Cmd Assign")
 
 The above entries result in the following assignment in the External Control window:
 
-[Picture]
+![DiGiCo External Control Assign](Resources/Documentation/Images/05.png "DiGiCo External Control Assign")
 
 ### Comments:
 *Asterix sign:* the /* at the end of the OSC string is replaced by the channel number and refers to the DS100 input channel with the same number. Referring to a channel number which is different from the console’s input channel is not possible (console channel 1 always controls DS100 input channel 1 and console channel 2 controls DS100 input channel 2, etc...).
+
 *Positioning:* It seems useful to use coordinate mapping. The positioning is mapped to one of the areas created in ArrayCalc and configured in R1. The digit before /* defines the targeted area. The value can be 1-4 according to which of the 4 positioning areas/coordinate mappings is targeted. Referring to different positioning areas for a single input channel is not possible.
+
 *DelayMode:* The three available delay modes of En-Scene correspond to the integer values 0-2. Generic OSC sends float values but these can be interpreted by the DS100 and translated accordingly.
+
 It is also possible to control other DS100 parameters with GenericOSC. In this document, we have restricted ourselves to the relevant Soundscape object parameters. 
 The OSC strings for the control of further parameters can be found in the OSC documentation of the DS100.
 
 ### Enabling the External Control window for a channel strip of the console:
-*Channel surface:*
+#### Channel surface:
 * Open the Channel Out window by clicking the bottom section of the channel strip.
 * Switch on External Control and click View.
 
-[Picture]
+![DiGiCo Channelstrip ext ctl enable](Resources/Documentation/Images/06.png "DiGiCo Channelstrip ext ctl enable")
 
-*External Control window:*
+#### External Control window:
 When the External Control window is displayed, the parameters can be changed using the hardware encoders.
 
-[Picture]
+![DiGiCo Channelstrip ext ctl enable](Resources/Documentation/Images/07.png "DiGiCo Channelstrip ext ctl enable")
 
+
+<a name="setupDigicoWithPollingBridge" />
 
 ## Enabling bidirectional communication for Generic OSC for Soundscape using the d&b Software bridge:
 
@@ -179,6 +206,9 @@ Start the Software bridge by clicking the “Start Engine” button
 
 [Picture]
 
+
+<a name="additionalFunctions" />
+
 ## Additional functions
 
 ### Protocol Traffic Logging
@@ -197,6 +227,9 @@ For this reason, only use this function for troubleshooting not for normal opera
 
 [Picture]
 [Picture]
+
+
+<a name="knownIssues" />
 
 ## Known issues
 
