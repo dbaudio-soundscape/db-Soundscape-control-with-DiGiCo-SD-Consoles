@@ -1,4 +1,4 @@
-# d&b Soundscape control with DiGiCo SD Consoles - Generic OSC 
+# **d&b Soundscape control with DiGiCo SD Consoles - Generic OSC**
 
 Copyright (C) 2017-2021, d&b audiotechnik GmbH & Co. KG
 
@@ -10,20 +10,22 @@ By downloading software from this site, you agree to the terms and conditions de
 
 <a name="toc" />
 
-## Table of contents
+## **Table of contents**
 
 * [Introduction](#introduction)
 * [Features](#features)
 * [Requirements](#requirements)
-* [Setting up Generic OSC for d&b Soundscape (stand alone)](#setupDigico)
-* [Enabling bidirectional communication for Generic OSC for Soundscape using the d&b Software bridge](#setupDigicoWithPollingBridge)
-* [Additional functions](#additionalFunctions)
+* [Setting up d&b Soundscape channel control](#setupDigico)
+* [Enabling bidirectional communication for d&b Soundscape channel control using the d&b Software bridge](#setupDigicoWithPollingBridge)
+  * [128 channel DS100 cascading](#128chCascade)
+  * [dual DS100 parallel](#dualDS100parallel)
+* [Additional functionality](#additionalFunctionality)
 * [Known issues](#knownIssues)
 
 
 <a name="introduction" />
 
-## Introduction
+## **Introduction**
 
 d&b Soundscape integration for DiGiCo consoles can be realized with the DiGiCo Generic OSC feature and the d&b Software bridge.
 
@@ -45,23 +47,23 @@ www.dbaudio.com and www.dbsoundscape.com.
 
 <a name="features" />
 
-## Features 
+## **Features**
 
-### Generic OSC functionality with d&b Soundscape
+### **Generic OSC functionality with d&b Soundscape**
 Control of the following d&b Soundscape parameters of the desired sound objects via the the console's channel strips 01-64.
 
 To handle these parameters, they can also be stored and recalled using the scene memory of the console.
 
-### En-Scene object parameters:
+### **En-Scene object parameters:**
 * X position (absolute or relative to a coordinate mapping)
 * Y position (absolute or relative to a coordinate mapping)
 * SPREAD
 * Delay mode
 
-### En-Space object parameters:
+### **En-Space object parameters:**
 * Reverb send level
 
-### Generic OSC functionality extended with the d&b Software bridge for d&b Soundscape
+### **Generic OSC functionality extended with the d&b Software bridge for d&b Soundscape**
 The d&b Software bridge extends the Generic OSC Soundscape integration with bidirectional communication between the DS100 and the console.
 
 The d&b Software bridge constantly polls the values of the parameters described above from the DS100 and sends them back to the DiGiCo Console. This means, the console status is constantly updated even if changes have been made to these object parameters using other controllers like R1, a show control system, touchscreen-devices, or similar.
@@ -71,34 +73,34 @@ As a result, a flexible workflow is maintained even in complex setups.
 
 <a name="requirements" />
 
-## Requirements
+## **Requirements**
 
 * Any DiGiCo SD Console with Generic OSC enabled.
 * d&b DS100 Signal Engine with active En-Scene and / or En-Space license.
 * Console and DS100 Signal Engine connected to the same Ethernet network (to establish OSC communication).
 * For bidirectional communication / workflow: Win or macOS PC running the d&b Software bridge. The PC must be connected to the same network. On Windows OS, the d&b Software bridge “RemoteProtocolbridge” requires installing the Visual C++ Redistributable Packages from Microsoft
 
-### Helpful / necessary documents: 
+### **Helpful / necessary documents:**
 OSC documentation of the DS100 which is available for download from the related DS100 product page at www.dbaudio.com.
 
 
 <a name="setupDigico" />
 
-## Setting up Generic OSC for d&b Soundscape (stand alone)
+## **Setting up d&b Soundscape channel control**
 
-### Set up Generic OSC and connect with DS100:
+### **Set up Generic OSC and connect with DS100:**
 * On the Master screen, select “Setup” and go to “External Control”.
 
-<img src="Resources/Documentation/Images/01.png" alt="DiGiCo Master Screen" width="50%">
+<img src="Resources/Documentation/Screenshots/01.png" alt="DiGiCo Master Screen" width="500px">
 
-### Switch on Generic OSC and select the correct mode for d&b Soundscape control
+### **Switch on Generic OSC and select the correct mode for d&b Soundscape control**
 * Switch Enable External Control to “YES”.
-* Switch Input Channel Controllers to “OSC-generic”.
+* Switch Input Channel Controllers to “d&b”.
 * Switch on “Suppress OSC retransmit” & “Recall with session” if desired …
 
-<img src="Resources/Documentation/Images/02.png" alt="DiGiCo External Control" width="50%">
+<img src="Resources/Documentation/Screenshots/03.png" alt="DiGiCo External Control" width="500px">
 
-### Enter the parameters to establish the connection with the DS100:
+### **Enter the parameters to establish the connection with the DS100:**
 Ensure the DS100 is connected to the same Ethernet network as your Console and their IP addresses and subnet masks are compatible.
 Tap the “add device” button and select “other OSC” from the drop-down list. Enter the values to establish the connection: 
 * Enter a name of your choice.
@@ -108,60 +110,53 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
- <img src="Resources/Documentation/Images/03.png" alt="DiGiCo External Control Detail" width="30%">
 
-### Assign the OSC commands to the rotaries and switches of the External Control window according to how they should control the d&b Soundscape parameters:
-* Click the ”Costumise” button to display an assignment list for 8 rotaries.
-* Assign the parameters of En-Scene and En-Space to the rotaries by entering the OSC commands and values in the OSC column.
+### **Enabling the External Control window for a channel strip of the console:**
 
-<img src="Resources/Documentation/Images/04.png" alt="DiGiCo OSC Cmd Assign" width="30%">
+#### **Channel surface:**
+* Open the Channel Outputs window by clicking the bottom section of the channel strip.
+* Switch on d&b Control and click View.
+* Instead of regular lcr pan control, the d&b Soundscape two dimensional panner is now visible in the channelstrip
 
-The above entries result in the following assignment in the External Control window:
+<img src="Resources/Documentation/Screenshots/04.png" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
-<img src="Resources/Documentation/Images/05.png" alt="DiGiCo External Control Assign" width="40%">
+#### **External Control window:**
+* Right-click on the d&b Soundscape control in the channelstrip to bring up the d&b Soundscape window, containing from left to right:
+  * xy Sound Object position fader
+  * Sound Object x position rotary
+  * Sound Object y position rotary
+  * Sound Object Spread factor rotary
+  * Sound Object EnSpace send gain rotary
+  * Sound Object delay mode toggle buttons
+* These values can be controlled by hardware knobs and buttons
+* Right-click on the xy Sound Object position fader to open an enlarged version of the xy position fader combined with spread, delay mode and EnSpace send gain visualization
+* Click on the Object Number button on the right side of the enlarged xy Sound Object position fader window to bring up the Object Number assignment window and choose the Sound Object number, the channelstrip shall control.
+* Click on the Mapping button on the right side of the enlarged xy Sound Object position fader window to bring up the Mapping Area assignment window and choose the mapping area that shall be targeted by the d&b Soundscape control of the channelstrip.
 
-### Comments:
-**Asterix sign:** the /* at the end of the OSC string is replaced by the channel number and refers to the DS100 input channel with the same number. Referring to a channel number which is different from the console’s input channel is not possible (console channel 1 always controls DS100 input channel 1 and console channel 2 controls DS100 input channel 2, etc...).
 
-**Positioning:** It seems useful to use coordinate mapping. The positioning is mapped to one of the areas created in ArrayCalc and configured in R1. The digit before /* defines the targeted area. The value can be 1-4 according to which of the 4 positioning areas/coordinate mappings is targeted. Referring to different positioning areas for a single input channel is not possible.
-
-**DelayMode:** The three available delay modes of En-Scene correspond to the integer values 0-2. Generic OSC sends float values but these can be interpreted by the DS100 and translated accordingly.
-
-It is also possible to control other DS100 parameters with GenericOSC. In this document, we have restricted ourselves to the relevant Soundscape object parameters. 
-The OSC strings for the control of further parameters can be found in the OSC documentation of the DS100.
-
-### Enabling the External Control window for a channel strip of the console:
-#### Channel surface:
-* Open the Channel Out window by clicking the bottom section of the channel strip.
-* Switch on External Control and click View.
-
-<img src="Resources/Documentation/Images/06.png" alt="DiGiCo Channelstrip ext ctl enable" width="50%">
-
-#### External Control window:
-When the External Control window is displayed, the parameters can be changed using the hardware encoders.
-
-<img src="Resources/Documentation/Images/07.png" alt="DiGiCo Channelstrip ext ctl enable" width="50%">
+<img src="Resources/Documentation/Screenshots/05.png" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
 
 <a name="setupDigicoWithPollingBridge" />
 
-## Enabling bidirectional communication for Generic OSC for Soundscape using the d&b Software bridge:
+## **Enabling bidirectional communication for d&b Soundscape channel control using the d&b Software bridge:**
 
-### General:
-The OSC protocol does not provide a function that automatically updates the parameter values of an external controller if they have been changed in the controlled device (e.g. by a third device).
+### **General:**
+The OSC protocol specification does not define how value changes in a controlled device are updated and kept in sync in the externall controller.
 
-For this kind of bidirectional communication, the controlling OSC device would have to query and update the parameter values actively and continuously (polling function via OSC). Unfortunately, polling is not possible with DiGiCo Generic OSC.
+For this kind of bidirectional communication, the OSC controller has to read updated values from the controlled device actively at a sufficiently small refresh interval to provide this information e.g. on a software user interface (so called OSC 'polling' functionality). Polling updated device data is not available in DiGiCo d&b Soundscape control.
 
 In order to allow bidirectional communication between DiGiCo consoles and the DS100, a software bridge enabling this functionality for the Soundscape object parameters is provided by d&b.
 
 This provides a workflow in which d&b Soundscape can be operated by a console, the R1 Remote control software and other controllers simultaneously. And the console always "knows" and displays the current parameter state ofthe DS100.
 
-### Different data-flow for bidirectional communication with the Software bridge:
+### **Different data-flow for bidirectional communication with the Software bridge:**
 When using the Software bridge for bidirectional communication with the console, it does not "speak" directly to the DS100, but to the PC running the Software bridge.
 
-The Software bridge passes the communication from the console on to the DS100 and constantly queries the parameters in the DS100 and sends them to the console.
+The Software bridge passes the OSC data traffic from the console on to the DS100 and constantly queries the parameters from the DS100 and sends them to the console.
 
-### Parameters to establish the connection of the Console with the Software bridge
+
+### **Parameters to establish the connection of the Console with the Software bridge**
 Ensure the Console, the PC running the Software bridge and the DS100 are connected to the same Ethernet network and their IP addresses and subnet masks are compatible.
 * Click the “add device” button, select “other OSC” from the drop-down list and enter the values to establish the connection:
 * Enter a name of your choice.
@@ -172,28 +167,31 @@ Ensure the Console, the PC running the Software bridge and the DS100 are connect
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
-<img src="Resources/Documentation/Images/09.PNG" alt="Digico Ext Ctl via RPB" width="50%">
+<img src="Resources/Documentation/Screenshots/03.PNG" alt="Digico Ext Ctl via RPB" width="500px">
 
- ### Parameters to establish the connection of the Software bridge with the console and the DS100:
+ ### **Parameters to establish the connection of the Software bridge with the console and the DS100:**
  Ensure the console, the PC running the Software bridge and the DS100 are connected to the same Ethernet network and their IP addresses and subnet masks are compatible.
 
-
-### Connection with the DS100
+### **Connection with the DS100**
 **Role A** for the connection with the DS100: 
 * Enter the IP address of the DS100 in the line edit. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
 * Open the "OSC protocol configuration" communication settings window by clicking the "Configuration" button for Role A the protocol. 
 * Enter the Listening port and the Remote port in the two fields field. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011)
-* Enable the parameters you want to use by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
+* Enable the following parameters by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
+  * Sound Object Position X
+  * Sound Object Position Y
+  * Sound Object Spread
+  * Sound Object Delay Mode
+  * Sound Object Send Gain
 * Enter the channels you want to control by defining a range "1-16" or multiple channel numbers divided by commas "1, 2, 3, 7, 8, 9".
-* For the x and y position parameters, define the coordinate mapping / positioning area by checking the corresp. boxes under "Mapping". This must be the same value you used for the
-“/dbaudio1/coordinatemapping/source_position_x/ & /dbaudio1/coordinatemapping/source_position_y/“
-for Generic OSC on the console.
+* For the x and y position parameters, define the Mapping Areas to be used by checking the corresp. boxes under "Mapping". These must be all Mapping Areas you have used across all channelstrip configurations using d&b Soundscape control on the console.
+* If desired, you can choose a polling interval different from the default 100ms.
 * Finish the configuration of the connection with the DS100 by clicking the OK button in the General configuration window.
 
-<img src="Resources/Documentation/Screenshots/06.PNG" alt="RPB SingleDS100" width="50%">
-<img src="Resources/Documentation/Screenshots/07.PNG" alt="RPB Protocol Cfg" width="40%">
+<img src="Resources/Documentation/Screenshots/06.PNG" alt="RPB SingleDS100" width="500px">
+<img src="Resources/Documentation/Screenshots/07.PNG" alt="RPB Protocol Cfg" width="400px">
 
-### Connection with the Console
+### **Connection with the Console**
 **Role B** for the connection with the Console:
 * Enter the IP address of the console in the line edit.
 * Open the "OSC protocol configuration" communication settings window by clicking the "Configuration" button for the Role B protocol. 
@@ -202,26 +200,76 @@ for Generic OSC on the console.
 * Finish the configuration of the connection with the Console by clicking the OK button in the General configuration window.
 
 
-Assign the OSC commands to the rotaries and switches of the External Remote Window of Generic OSC on the Console in the same way as for operation without the Software bridge.
-
-Please refer to Section 4 “Setting up Generic OSC for d&b Soundscape” of this document.
-
 **Note:** The Software bridge can only handle the following d&b Soundscape object parameters:
 * Position
 * Spread
 * DelayMode
 * En-Space Send Gain.
 
+### **Sound Object Data Handling**
+* Select "Forward value changes only" from the Data handling dropdown to achive that all data that is received from DS100 through polling and that contains changed data values is forwarded to Console.
+* Click the "Configuration" button for Data handling module and select "0.001" as sensibility for value change detection.
+
+<img src="Resources/Documentation/Screenshots/08.PNG" alt="RPB Engine ON" width="500px">
+<img src="Resources/Documentation/Screenshots/09.PNG" alt="RPB Value Change Prec" width="350px">
+
 Start the Software bridge by clicking the “Start Engine” button
 
-<img src="Resources/Documentation/Screenshots/08.PNG" alt="RPB Engine ON" width="50%">
+
+<a name="128chCascade" />
+
+### **Using 128 console channels to control two DS100**
+By choosing the Data handling "Multiplex multiple n-ch. A to m-ch. B protocols", d&b Software bridge can be used to control two DS100 from a single Console to achieve a total maximum of 128 Sound Objects.
+* Add a second DS100 connection by clicking the "+" in **Role A** protocol groupbox.
+* Enter the IP address of the second DS100 in the line edit. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
+* Open the OSC protocol configuration communication settings window for the second DS100 by clicking the "Configuration" button of the just added second Role A the protocol. 
+* Enter the Listening port and the Remote port in the two fields field. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011).
+* Enable the following parameters by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
+  * Sound Object Position X
+  * Sound Object Position Y
+  * Sound Object Spread
+  * Sound Object Delay Mode
+  * Sound Object Send Gain
+* Enter the channels you want to control by defining a range "1-16" or multiple channel numbers divided by commas "1, 2, 3, 7, 8, 9" as well as mapping areas. **These channels refer to the second DS100 and map to channels 65-128 in the Console! (1=65 ... 64=128)**
+* Click "Ok" to close the communication settings window.
+* Select "Multiplex multiple n-ch. A to m-ch. B protocols" from the Data handling dropdown.
+* Click on "Configuration" button for Data handling module to open the configuration window specific to this data handling mode.
+* Enter the value 64 for "Ch. count per ProtocolA (n)" that corresponds to the two DS100 configured.
+* Enter the value 128 for "Ch. count per ProtocolB (m)" that corresponds to the Console.
+* Click "Ok" to close the configuration window.
+
+<img src="Resources/Documentation/Screenshots/11.PNG" alt="RPB Engine ON" width="500px">
+<img src="Resources/Documentation/Screenshots/12.PNG" alt="RPB Engine ON" width="400px">
+
+<a name ="dualDS100parallel" />
+
+### **Using manual OSC failover with two DS100**
+By choosing the Data handling "A1 forwarding only (val. changes only)" and switching to the complementary "A2 forwarding only (val. changes only)" in a failover situation, d&b Software bridge can be used to control two DS100 in parallel and use only the data received by polling from one of the DS100. This way, in case the main DS100 fails, switching to the backup DS100 regarding updating data values in the Console can be achieved.
+* Add a second DS100 connection by clicking the "+" in **Role A** protocol groupbox.
+* Enter the IP address of the second DS100 in the line edit. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
+* Open the OSC protocol configuration communication settings window for the second DS100 by clicking the "Configuration" button of the just added second Role A the protocol. 
+* Enter the Listening port and the Remote port in the two fields field. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011).
+* Enable the following parameters by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
+  * Sound Object Position X
+  * Sound Object Position Y
+  * Sound Object Spread
+  * Sound Object Delay Mode
+  * Sound Object Send Gain
+* Enter the channels you want to control by defining a range "1-16" or multiple channel numbers divided by commas "1, 2, 3, 7, 8, 9" as well as mapping areas. **These channels must be identical inbetween configurations of both DS100 configured in Role A**
+* Click "Ok" to close the communication settings window.
+* Select "A1 forwarding only (val. changes only)" from the Data handling dropdown to achive that all data that is received from DS100 through polling and that contains changed data values is forwarded to Console.
+* Click the "Configuration" button for Data handling module and select "0.001" as sensibility for value change detection.
+* When the system is running and a situation arises that requires switching from main to backup DS100, select "A2 forwarding only (val. changes only)" while the Software bridge is running.
+
+<img src="Resources/Documentation/Screenshots/14.PNG" alt="RPB Engine ON" width="500px">
+<img src="Resources/Documentation/Screenshots/15.PNG" alt="RPB Engine ON" width="400px">
 
 
-<a name="additionalFunctions" />
+<a name="additionalFunctionality" />
 
-## Additional functions
+## **Additional functionality**
 
-### Protocol Traffic Logging
+### **Protocol Traffic Logging**
 The Software bridge can log and display the network traffic handled.
 
 This function is intended to simplify error analysis.
@@ -237,14 +285,14 @@ For this reason, only use this function for troubleshooting not for normal opera
 * The dropdown in the lower left corner allows toggeling between a traffic plot and a message log.
 * Clicking the "Close" button closes the window.
 
-<img src="Resources/Documentation/Screenshots/10.PNG" alt="RPB Traffic" width="60%">
+<img src="Resources/Documentation/Screenshots/10.PNG" alt="RPB Traffic" width="600px">
 
 
 <a name="knownIssues" />
 
-## Known issues
+## **Known issues**
 
-### Delay mode:
+### **Delay mode:**
 The three available delay modes of En-Scene correspond to the integer values 0-2.
 
 Generic OSC sends and receives float values.
