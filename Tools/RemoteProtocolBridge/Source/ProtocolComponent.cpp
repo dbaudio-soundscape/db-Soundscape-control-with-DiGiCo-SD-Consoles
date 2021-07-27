@@ -313,6 +313,18 @@ void ProtocolGroupComponent::TriggerParentConfigRefresh()
 		m_parentComponent->TriggerParentConfigRefresh();
 }
 
+/**
+ * Proxy method to refresh the processing engine with current config
+ * and restart it if it was running.
+ */
+bool ProtocolGroupComponent::RefreshEngine()
+{
+	if (m_parentComponent)
+		return m_parentComponent->RefreshEngine();
+	else
+		return false;
+}
+
 
 // **************************************************************************************
 //    class ProtocolComponent
@@ -398,23 +410,16 @@ void ProtocolComponent::resized()
  */
 void ProtocolComponent::childWindowCloseTriggered(DialogWindow* childWindow)
 {
-	ProcessingEngineConfig* config = m_parentComponent->GetConfig();
-	ProcessingEngine* engine = m_parentComponent->GetEngine();
-
-	if (childWindow == m_ProtocolConfigDialog.get())
+	if (m_parentComponent && m_ProtocolConfigDialog && childWindow == m_ProtocolConfigDialog.get())
 	{
-		if (config && engine)
-		{
-			bool EngineIsRunning = engine->IsRunning();
-			if (EngineIsRunning)
-				engine->Stop();
+		ProcessingEngineConfig* config = m_parentComponent->GetConfig();
 
+		if (config)
+		{
 			m_ProtocolConfigDialog->DumpConfig(*config);
 			config->WriteConfiguration();
-			engine->SetConfig(*config);
 
-			if (EngineIsRunning)
-				engine->Start();
+			m_parentComponent->RefreshEngine();
 		}
 
 		if (m_ProtocolConfigEditButton)
@@ -512,7 +517,10 @@ void ProtocolComponent::comboBoxChanged(ComboBox* comboBox)
 	ignoreUnused(comboBox);
 
 	if (m_parentComponent)
+	{
 		m_parentComponent->TriggerParentConfigDump();
+		m_parentComponent->RefreshEngine();
+	}
 }
 
 /**
@@ -537,7 +545,10 @@ void ProtocolComponent::textEditorReturnKeyPressed(TextEditor& textEdit)
 	ignoreUnused(textEdit);
 
 	if (m_parentComponent)
+	{
 		m_parentComponent->TriggerParentConfigDump();
+		m_parentComponent->RefreshEngine();
+	}
 }
 
 /**
@@ -549,6 +560,9 @@ void ProtocolComponent::textEditorReturnKeyPressed(TextEditor& textEdit)
 void ProtocolComponent::textEditorEscapeKeyPressed(TextEditor& textEdit)
 {
 	ignoreUnused(textEdit);
+
+	if (m_parentComponent)
+		m_parentComponent->TriggerParentConfigRefresh();
 }
 
 /**
@@ -560,6 +574,12 @@ void ProtocolComponent::textEditorEscapeKeyPressed(TextEditor& textEdit)
 void ProtocolComponent::textEditorFocusLost(TextEditor& textEdit)
 {
 	ignoreUnused(textEdit);
+
+	if (m_parentComponent)
+	{
+		m_parentComponent->TriggerParentConfigDump();
+		m_parentComponent->RefreshEngine();
+	}
 }
 
 /**
@@ -574,24 +594,17 @@ void ProtocolComponent::ToggleOpenCloseProtocolConfig(Button* button)
 		return;
 
 	ProcessingEngineConfig* config = m_parentComponent->GetConfig();
-	ProcessingEngine* engine = m_parentComponent->GetEngine();
 
 	// if the config dialog exists, this is a uncheck (close) click,
 	// which means we have to process edited data
 	if (m_ProtocolConfigDialog)
 	{
-		if (config && engine)
+		if (config)
 		{
-			bool EngineIsRunning = engine->IsRunning();
-			if (EngineIsRunning)
-				engine->Stop();
-
 			m_ProtocolConfigDialog->DumpConfig(*config);
 			config->WriteConfiguration();
-			engine->SetConfig(*config);
-
-			if (EngineIsRunning)
-				engine->Start();
+			
+			m_parentComponent->RefreshEngine();
 		}
 
 		button->setColour(TextButton::buttonColourId, Colours::dimgrey);
@@ -602,7 +615,7 @@ void ProtocolComponent::ToggleOpenCloseProtocolConfig(Button* button)
 	// otherwise we have to create the dialog and show it
 	else
 	{
-		if (config && engine)
+		if (config)
 		{
 			ProtocolType protocolType = config->GetProtocolData(m_NodeId, m_ProtocolId).Type;
 

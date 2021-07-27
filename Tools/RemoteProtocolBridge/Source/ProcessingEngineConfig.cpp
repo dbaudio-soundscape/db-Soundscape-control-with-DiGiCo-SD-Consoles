@@ -1085,6 +1085,23 @@ String ProcessingEngineConfig::GetObjectDescription(RemoteObjectIdentifier Id)
 }
 
 /**
+ * Helper method to check if a given remote object is involved in keepalive transmission and must not be filtered out e.g. based on value change detection.
+ * @param objectId    The remote object id to check.
+ * @return True if the object is involved in keepalive transmission, false if not.
+ */
+bool ProcessingEngineConfig::IsKeepaliveObject(RemoteObjectIdentifier objectId)
+{
+	switch(objectId)
+	{
+		case ROI_HeartbeatPing:
+		case ROI_HeartbeatPong:
+			return true;
+		default:
+			return false;
+	}
+}
+
+/**
 * Convenience function to resolve enum to sth. human readable (e.g. in config file)
 */
 String  ProcessingEngineConfig::ProtocolTypeToString(ProtocolType pt)
@@ -1136,6 +1153,10 @@ String ProcessingEngineConfig::ObjectHandlingModeToString(ObjectHandlingMode ohm
 		return "Reverse data only (B->A)";
 	case OHM_Mux_nA_to_mB_withValFilter:
 		return "Multiplex mult. n-ch. A to m-ch. B (fwd. val. changes only)";
+	case OHM_A1active_withValFilter:
+		return "A1 forwarding only (val. changes only)";
+	case OHM_A2active_withValFilter:
+		return "A2 forwarding only (val. changes only)";
 	default:
 		return "";
 	}
@@ -1160,6 +1181,10 @@ ObjectHandlingMode ProcessingEngineConfig::ObjectHandlingModeFromString(String m
 		return OHM_Reverse_B_to_A_only;
 	if (mode == ObjectHandlingModeToString(OHM_Mux_nA_to_mB_withValFilter))
 		return OHM_Mux_nA_to_mB_withValFilter;
+	if (mode == ObjectHandlingModeToString(OHM_A1active_withValFilter))
+		return OHM_A1active_withValFilter;
+	if (mode == ObjectHandlingModeToString(OHM_A2active_withValFilter))
+		return OHM_A2active_withValFilter;
 
 	return OHM_Invalid;
 }

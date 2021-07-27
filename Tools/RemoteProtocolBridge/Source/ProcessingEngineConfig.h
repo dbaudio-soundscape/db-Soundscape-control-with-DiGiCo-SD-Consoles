@@ -135,6 +135,8 @@ public:
 	static ObjectHandlingMode	ObjectHandlingModeFromString(String mode);
 
 	static String GetObjectDescription(RemoteObjectIdentifier Id);
+	static bool IsKeepaliveObject(RemoteObjectIdentifier Id);
+
 
 private:
     int GetNextUniqueId();

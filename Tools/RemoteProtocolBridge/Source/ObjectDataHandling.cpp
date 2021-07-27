@@ -612,6 +612,11 @@ bool Forward_only_valueChanges::OnReceivedMessageFromProtocol(ProtocolId PId, Re
  */
 bool Forward_only_valueChanges::IsChangedDataValue(const RemoteObjectIdentifier Id, const RemoteObjectAddressing& roAddr, const RemoteObjectMessageData& msgData, bool setAsNewCurrentData)
 {
+	if(ProcessingEngineConfig::IsKeepaliveObject(Id))
+		return true;
+	if(msgData.valCount == 0) // a value count of 0 indicates that this is a value polling message that shall be forwarded anyways
+		return true;
+
 	if (m_precision == 0)
 		return true;
 
@@ -907,14 +912,14 @@ bool Mux_nA_to_mB_withValFilter::OnReceivedMessageFromProtocol(ProtocolId PId, R
 		return false;
 
 	// check for changed value based on mapped addressing and target protocol id before forwarding data
-	std::pair<juce::Array<ProtocolId>, int16> targetProtoSrc = GetTargetProtocolsAndSource(PId, msgData);
+	std::pair<juce::Array<ProtocolId>, std::int32_t> targetProtoSrc = GetTargetProtocolsAndSource(PId, msgData);
 	RemoteObjectAddressing mappedOrigAddr = GetMappedOriginAddressing(PId, msgData);
 	bool targetProtoValid = !targetProtoSrc.first.isEmpty();
 
 	if (targetProtoValid && IsChangedDataValue(Id, mappedOrigAddr, msgData))
 	{
 		// finally before forwarding data, the target channel has to be adjusted according to what we determined beforehand to be the correct mapped channel for target protocol
-		msgData.addrVal.first = targetProtoSrc.second;
+		msgData.addrVal.first = static_cast<juce::int16>(targetProtoSrc.second);
 		auto sendSuccess = true;
 		for (auto const& targetPId : targetProtoSrc.first)
 			sendSuccess &= parentNode->SendMessageTo(targetPId, Id, msgData);
@@ -931,7 +936,7 @@ bool Mux_nA_to_mB_withValFilter::OnReceivedMessageFromProtocol(ProtocolId PId, R
  * @param msgData	The actual message value/content data
  * @return			The protocol ids and the mapped sourceid a value shall be sent to
  */
-std::pair<juce::Array<ProtocolId>, int16> Mux_nA_to_mB_withValFilter::GetTargetProtocolsAndSource(ProtocolId PId, const RemoteObjectMessageData &msgData)
+std::pair<juce::Array<ProtocolId>, std::int32_t> Mux_nA_to_mB_withValFilter::GetTargetProtocolsAndSource(ProtocolId PId, const RemoteObjectMessageData &msgData)
 {
 	const ProtocolId* PIdAIter = std::find(GetProtocolAIds().begin(), GetProtocolAIds().end(), PId);
 	const ProtocolId* PIdBIter = std::find(GetProtocolBIds().begin(), GetProtocolBIds().end(), PId);
@@ -964,7 +969,7 @@ std::pair<juce::Array<ProtocolId>, int16> Mux_nA_to_mB_withValFilter::GetTargetP
 			return std::make_pair(juce::Array<ProtocolId>(), chForA);
 	}
 
-	return std::make_pair(juce::Array<ProtocolId>(), static_cast<int16>(INVALID_ADDRESS_VALUE));
+	return std::make_pair(juce::Array<ProtocolId>(), static_cast<std::int32_t>(INVALID_ADDRESS_VALUE));
 }
 
 /**
@@ -1001,4 +1006,121 @@ RemoteObjectAddressing Mux_nA_to_mB_withValFilter::GetMappedOriginAddressing(Pro
 	{
 		return RemoteObjectAddressing();
 	}
+}
+
+
+// **************************************************************************************
+//    class A1active_withValFilter_withValFilter
+// **************************************************************************************
+/**
+ * Constructor of class A1active_withValFilter_withValFilter.
+ *
+ * @param parentNode	The objects' parent node that is used by derived objects to forward received message contents to.
+ */
+A1active_withValFilter::A1active_withValFilter(ProcessingEngineNode* parentNode)
+	: Forward_only_valueChanges(parentNode)
+{
+	SetMode(ObjectHandlingMode::OHM_A1active_withValFilter);
+}
+
+/**
+ * Destructor
+ */
+A1active_withValFilter::~A1active_withValFilter()
+{
+}
+
+/**
+ * Overridden from ObjectDataHandling_Abstract to use incoming ids
+ * to initialize internal master and slave protocol ids.
+ *
+ * @param PAId	Protocol Id of typeA protocol to add.
+ */
+void A1active_withValFilter::AddProtocolAId(ProtocolId PAId)
+{
+	ObjectDataHandling_Abstract::AddProtocolAId(PAId);
+
+	if (GetProtocolAIds().size() > 2)
+		jassertfalse; // only two typeA protocols are supported by this OHM!
+}
+
+/**
+ * Method to be called by parent node on receiving data from node protocol with given id
+ *
+ * @param PId		The id of the protocol that received the data
+ * @param Id		The object id to send a message for
+ * @param msgData	The actual message value/content data
+ * @return	True if successful sent/forwarded, false if not
+ */
+bool A1active_withValFilter::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
+{
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (!parentNode)
+		return false;
+
+	bool isProtocolBId = std::find(GetProtocolAIds().begin(), GetProtocolAIds().end(), PId) == GetProtocolAIds().end();
+	bool isFirstProtocolAId = GetProtocolAIds().size() >= 1 && PId == GetProtocolAIds()[0];
+
+	if (isProtocolBId || isFirstProtocolAId)
+		return Forward_only_valueChanges::OnReceivedMessageFromProtocol(PId, Id, msgData);
+	else
+		return false;
+}
+
+// **************************************************************************************
+//    class A2active_withValFilter_withValFilter
+// **************************************************************************************
+/**
+ * Constructor of class A2active_withValFilter_withValFilter.
+ *
+ * @param parentNode	The objects' parent node that is used by derived objects to forward received message contents to.
+ */
+A2active_withValFilter::A2active_withValFilter(ProcessingEngineNode* parentNode)
+	: Forward_only_valueChanges(parentNode)
+{
+	SetMode(ObjectHandlingMode::OHM_A2active_withValFilter);
+}
+
+/**
+ * Destructor
+ */
+A2active_withValFilter::~A2active_withValFilter()
+{
+}
+
+/**
+ * Overridden from ObjectDataHandling_Abstract to use incoming ids
+ * to initialize internal master and slave protocol ids.
+ *
+ * @param PAId	Protocol Id of typeA protocol to add.
+ */
+void A2active_withValFilter::AddProtocolAId(ProtocolId PAId)
+{
+	ObjectDataHandling_Abstract::AddProtocolAId(PAId);
+
+	if (GetProtocolAIds().size() > 2)
+		jassertfalse; // only two typeA protocols are supported by this OHM!
+}
+
+/**
+ * Method to be called by parent node on receiving data from node protocol with given id
+ *
+ * @param PId		The id of the protocol that received the data
+ * @param Id		The object id to send a message for
+ * @param msgData	The actual message value/content data
+ * @return	True if successful sent/forwarded, false if not
+ */
+bool A2active_withValFilter::OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData)
+{
+	const ProcessingEngineNode* parentNode = ObjectDataHandling_Abstract::GetParentNode();
+	if (!parentNode)
+		return false;
+
+	bool isProtocolBId = std::find(GetProtocolAIds().begin(), GetProtocolAIds().end(), PId) == GetProtocolAIds().end();
+	bool isSecondProtocolAId = GetProtocolAIds().size() >= 2 && PId == GetProtocolAIds()[1];
+
+	if (isProtocolBId || isSecondProtocolAId)
+		return Forward_only_valueChanges::OnReceivedMessageFromProtocol(PId, Id, msgData);
+	else
+		return false;
 }

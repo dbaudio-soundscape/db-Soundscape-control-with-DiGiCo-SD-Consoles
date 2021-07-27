@@ -216,13 +216,13 @@ void PlotComponent::paint(Graphics &g)
 				//Graph curve colour for individual protocols
 				g.setColour(m_protocolPlotColours.at(pd.first));
 
-			path.startNewSubPath(Point<float>(plotOrigX, plotOrigY - (m_plotData[pd.first].front()) * vFactor));
+			path.startNewSubPath(juce::Point<float>(plotOrigX, plotOrigY - (m_plotData[pd.first].front()) * vFactor));
 			for (int i = 1; i < m_plotData[pd.first].size(); ++i)
 			{
 				newPointX = plotOrigX + float(i) * plotStepWidthPx;
 				newPointY = plotOrigY - (m_plotData[pd.first].at(i) * vFactor);
 
-				path.lineTo(Point<float>(newPointX, newPointY));
+				path.lineTo(juce::Point<float>(newPointX, newPointY));
 			}
 			g.strokePath(path, PathStrokeType(2));
 			path.closeSubPath();

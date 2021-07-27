@@ -54,8 +54,8 @@ public:
 	virtual void SetObjectHandlingConfiguration(const ProcessingEngineConfig& config, NodeId NId);
 	ObjectHandlingMode GetMode();
 
-	void AddProtocolAId(ProtocolId PAId);
-	void AddProtocolBId(ProtocolId PBId);
+	virtual void AddProtocolAId(ProtocolId PAId);
+	virtual void AddProtocolBId(ProtocolId PBId);
 	void ClearProtocolIds();
 
 	virtual bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) = 0;
@@ -217,10 +217,54 @@ public:
 	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
 
 private:
-	std::pair<juce::Array<ProtocolId>, int16> GetTargetProtocolsAndSource(ProtocolId PId, const RemoteObjectMessageData &msgData);
+	std::pair<juce::Array<ProtocolId>, std::int32_t> GetTargetProtocolsAndSource(ProtocolId PId, const RemoteObjectMessageData &msgData);
 	RemoteObjectAddressing GetMappedOriginAddressing(ProtocolId PId, const RemoteObjectMessageData& msgData);
 
 	int m_protoChCntA; /**< Channel count configuration value that is to be expected per protocol type A. */
 	int m_protoChCntB; /**< Channel count configuration value that is to be expected per protocol type B. */
+
+};
+
+/**
+ * Class A1active_withValFilter is a class combining fowarding data from first RoleA protocol
+ * to RoleB protocols with filtering data to only forward changed object values.
+ */
+class A1active_withValFilter : public Forward_only_valueChanges
+{
+public:
+	A1active_withValFilter(ProcessingEngineNode* parentNode);
+	~A1active_withValFilter();
+
+	//==============================================================================
+	void AddProtocolAId(ProtocolId PAId) override;
+
+	//==============================================================================
+	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
+protected:
+
+private:
+
+};
+
+/**
+ * Class A2active_withValFilter is a class combining fowarding data from second RoleA protocol
+ * to RoleB protocols with filtering data to only forward changed object values.
+ */
+class A2active_withValFilter : public Forward_only_valueChanges
+{
+public:
+	A2active_withValFilter(ProcessingEngineNode* parentNode);
+	~A2active_withValFilter();
+
+	//==============================================================================
+	void AddProtocolAId(ProtocolId PAId) override;
+
+	//==============================================================================
+	bool OnReceivedMessageFromProtocol(ProtocolId PId, RemoteObjectIdentifier Id, RemoteObjectMessageData& msgData) override;
+
+protected:
+
+private:
 
 };

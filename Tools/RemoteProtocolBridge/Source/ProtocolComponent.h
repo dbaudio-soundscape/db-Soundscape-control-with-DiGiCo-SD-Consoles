@@ -66,6 +66,7 @@ public:
 	int RefreshUIfromConfig(const NodeId& parentNodeId, const Array<ProtocolId> protocolIds, const ProcessingEngineConfig& config);
 	void TriggerParentConfigDump();
 	void TriggerParentConfigRefresh();
+	bool RefreshEngine();
 	
 	//==============================================================================
 	ProcessingEngineConfig* GetConfig();

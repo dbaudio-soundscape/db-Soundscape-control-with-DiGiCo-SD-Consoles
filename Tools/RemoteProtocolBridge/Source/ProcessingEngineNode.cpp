@@ -233,6 +233,10 @@ ObjectDataHandling_Abstract* ProcessingEngineNode::CreateObjectDataHandling(Obje
 		return new Forward_A_to_B_only(this);
 	case OHM_Forward_only_valueChanges:
 		return new Forward_only_valueChanges(this);
+	case OHM_A1active_withValFilter:
+		return new A1active_withValFilter(this);
+	case OHM_A2active_withValFilter:
+		return new A2active_withValFilter(this);
 	case OHM_Remap_A_X_Y_to_B_XY:
 		return new Remap_A_X_Y_to_B_XY_Handling(this);
 	case OHM_Mux_nA_to_mB:
