@@ -91,7 +91,7 @@ OSC documentation of the DS100 which is available for download from the related 
 ### **Set up Generic OSC and connect with DS100:**
 * On the Master screen, select “Setup” and go to “External Control”.
 
-<img src="Resources/Documentation/Screenshots/01.png" alt="DiGiCo Master Screen" width="500px">
+<img src="Resources/Documentation/Screenshots/01.PNG" alt="DiGiCo Master Screen" width="500px">
 
 ### **Switch on Generic OSC and select the correct mode for d&b Soundscape control**
 * Switch Enable External Control to “YES”.
@@ -99,7 +99,7 @@ OSC documentation of the DS100 which is available for download from the related 
 * Switch on “Suppress OSC retransmit” to not have the Console reply to every incoming OSC message 
 * Switch on “Recall with session” if loading a session shall trigger sending all parameters as OSC messages initially
 
-<img src="Resources/Documentation/Screenshots/03.png" alt="DiGiCo External Control" width="500px">
+<img src="Resources/Documentation/Screenshots/03.PNG" alt="DiGiCo External Control" width="500px">
 
 ### **Enter the parameters to establish the connection with the DS100:**
 Ensure the DS100 is connected to the same Ethernet network as your Console and their IP addresses and subnet masks are compatible.
@@ -119,7 +119,7 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 * Switch on d&b Control and click View.
 * Instead of regular lcr pan control, the d&b Soundscape two-dimensional panner is now visible in the channelstrip
 
-<img src="Resources/Documentation/Screenshots/04.png" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
+<img src="Resources/Documentation/Screenshots/04.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
 #### **External Control window:**
 * Right-click on the d&b Soundscape control in the channelstrip to bring up the d&b Soundscape window, containing from left to right:
@@ -135,7 +135,7 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 * Click on the Mapping button on the right side of the enlarged xy Sound Object position fader window to bring up the Mapping Area assignment window and choose the mapping area that shall be targeted by the d&b Soundscape control of the channelstrip.
 
 
-<img src="Resources/Documentation/Screenshots/05.png" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
+<img src="Resources/Documentation/Screenshots/05.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
 
 <a name="setupDigicoWithPollingBridge" />
