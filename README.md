@@ -35,11 +35,11 @@ The DiGiCo Generic OSC feature enables DiGiCo SD consoles to remote control othe
 
 This feature of the DiGiCo consoles in itself can be used to control d&b Soundscape parameters in the DS100 from the console surface.
 
-In addition, d&b provides the free software tool “RemoteProtocolbridge” for MacOS and Windows which enables bidirectional communication and adjusts the parameter values between consoles and the DS100 in both directions. This ensures that the console always displays the actual status of the DS100, even if parameterson the DS100 have been changed by other tools, such as the d&b R1 Remote control software. This is possible since the Software bridge transfers all parameter changes directly to the console surface.
+In addition, d&b provides the free software tool “RemoteProtocolBridge” for MacOS and Windows which enables bidirectional communication and adjusts the parameter values between consoles and the DS100 in both directions. This ensures that the console always displays the actual status of the DS100, even if parameters on the DS100 have been changed by other tools, such as the d&b R1 Remote control software. This is possible since the Software bridge transfers all parameter changes directly to the console surface.
 
 All this enables a basic integration of d&b Soundscape into the DiGiCo console user interface. As a result, the object-based functions of d&b Soundscape are added to the DiGiCo workflow, from object control in the channel strip up to the scene memory of the consoles.
 
-More information about the Generic OSC feature is provided on the website or from the DiGiCo Support team.
+More information about the Generic OSC feature is provided on the website or from the DiGiCo Support team. www.digico.biz
 
 For more info about the d&b Soundscape system and concept, please visit:
 www.dbaudio.com and www.dbsoundscape.com.
@@ -95,8 +95,9 @@ OSC documentation of the DS100 which is available for download from the related 
 
 ### **Switch on Generic OSC and select the correct mode for d&b Soundscape control**
 * Switch Enable External Control to “YES”.
-* Switch Input Channel Controllers to “d&b”.
-* Switch on “Suppress OSC retransmit” & “Recall with session” if desired …
+* Switch Input Channel Controllers to “OSC-generic”.
+* Switch on “Suppress OSC retransmit” to not have the Console reply to every incoming OSC message 
+* Switch on “Recall with session” if loading a session shall trigger sending all parameters as OSC messages initially
 
 <img src="Resources/Documentation/Screenshots/03.png" alt="DiGiCo External Control" width="500px">
 
@@ -106,7 +107,7 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 * Enter a name of your choice.
 * Enter the IP address of the DS100. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
 * Enter the Send port (this is the listening port of the DS100 = 50010).
-* Enter the Receive port of the DS100 (this is the reply port of the DS100 = 50011).
+* Enter the Receive port (this is the port that the DS100 replies to = 50011).
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
@@ -148,10 +149,10 @@ For this kind of bidirectional communication, the OSC controller has to read upd
 
 In order to allow bidirectional communication between DiGiCo consoles and the DS100, a software bridge enabling this functionality for the Soundscape object parameters is provided by d&b.
 
-This provides a workflow in which d&b Soundscape can be operated by a console, the R1 Remote control software and other controllers simultaneously. And the console always "knows" and displays the current parameter state ofthe DS100.
+This provides a workflow in which d&b Soundscape can be operated by a console, the R1 Remote control software and other controllers simultaneously. And the console always "knows" and displays the current parameter state of the DS100.
 
-### **Different data-flow for bidirectional communication with the Software bridge:**
-When using the Software bridge for bidirectional communication with the console, it does not "speak" directly to the DS100, but to the PC running the Software bridge.
+### Different data-flow for bidirectional communication with the Software bridge:
+When using the Software bridge for bidirectional communication with the console, the latter does not "speak" directly to the DS100, but to the PC running the Software bridge.
 
 The Software bridge passes the OSC data traffic from the console on to the DS100 and constantly queries the parameters from the DS100 and sends them to the console.
 
@@ -160,10 +161,9 @@ The Software bridge passes the OSC data traffic from the console on to the DS100
 Ensure the Console, the PC running the Software bridge and the DS100 are connected to the same Ethernet network and their IP addresses and subnet masks are compatible.
 * Click the “add device” button, select “other OSC” from the drop-down list and enter the values to establish the connection:
 * Enter a name of your choice.
-* Enter the IP address of the PC.
-* The IP address indicated in the network settings of the PC running the Software bridge.
-* Enter the Send port of the software (do not use the same port as on the DS100).
-* Enter the Receive port of the software (do not use the same port as on the DS100).
+* Enter the IP address of the PC running the Software bridge.
+* Enter the Send port to use for the connection to the Software bridge (do not use the same port as used by the DS100, e.g. 50012).
+* Enter the Receive port to use for the connection to the Software bridge (do not use the same port as used by the DS100, e.g. 50013).
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
@@ -174,9 +174,9 @@ Ensure the Console, the PC running the Software bridge and the DS100 are connect
 
 ### **Connection with the DS100**
 **Role A** for the connection with the DS100: 
-* Enter the IP address of the DS100 in the line edit. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
+* Enter the IP address of the DS100 in the text field. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
 * Open the "OSC protocol configuration" communication settings window by clicking the "Configuration" button for Role A the protocol. 
-* Enter the Listening port and the Remote port in the two fields field. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011)
+* Enter the Listening port and the Remote port in the two text fields. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011)
 * Enable the following parameters by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
   * Sound Object Position X
   * Sound Object Position Y
@@ -193,9 +193,9 @@ Ensure the Console, the PC running the Software bridge and the DS100 are connect
 
 ### **Connection with the Console**
 **Role B** for the connection with the Console:
-* Enter the IP address of the console in the line edit.
+* Enter the IP address of the console in the text field.
 * Open the "OSC protocol configuration" communication settings window by clicking the "Configuration" button for the Role B protocol. 
-* Enter the Listening port and the Receive port of the console two fileds.
+* Enter the Listening port and the Receive port as used when setting up the console (e.g. as suggested above 50012 and 50013).
 * DO NOT enable any objects for polling by clicking the "enable" check mark.
 * Finish the configuration of the connection with the Console by clicking the OK button in the General configuration window.
 
@@ -221,9 +221,9 @@ Start the Software bridge by clicking the “Start Engine” button
 ### **Using 128 console channels to control two DS100**
 By choosing the Data handling "Multiplex multiple n-ch. A to m-ch. B protocols", d&b Software bridge can be used to control two DS100 from a single Console to achieve a total maximum of 128 Sound Objects.
 * Add a second DS100 connection by clicking the "+" in **Role A** protocol groupbox.
-* Enter the IP address of the second DS100 in the line edit. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
+* Enter the IP address of the second DS100 in the text field. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
 * Open the OSC protocol configuration communication settings window for the second DS100 by clicking the "Configuration" button of the just added second Role A the protocol. 
-* Enter the Listening port and the Remote port in the two fields field. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011).
+* Enter the Listening port and the Remote port in the two text fields. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011).
 * Enable the following parameters by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
   * Sound Object Position X
   * Sound Object Position Y
@@ -246,9 +246,9 @@ By choosing the Data handling "Multiplex multiple n-ch. A to m-ch. B protocols",
 ### **Using manual OSC failover with two DS100**
 By choosing the Data handling "A1 forwarding only (val. changes only)" and switching to the complementary "A2 forwarding only (val. changes only)" in a failover situation, d&b Software bridge can be used to control two DS100 in parallel and use only the data received by polling from one of the DS100. This way, in case the main DS100 fails, switching to the backup DS100 regarding updating data values in the Console can be achieved.
 * Add a second DS100 connection by clicking the "+" in **Role A** protocol groupbox.
-* Enter the IP address of the second DS100 in the line edit. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
+* Enter the IP address of the second DS100 in the text field. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3.
 * Open the OSC protocol configuration communication settings window for the second DS100 by clicking the "Configuration" button of the just added second Role A the protocol. 
-* Enter the Listening port and the Remote port in the two fields field. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011).
+* Enter the Listening port and the Remote port in the two text fields. (the Remote port is the listening port of the DS100 = 50010; the Listening port is the reply port of the DS100 = 50011).
 * Enable the following parameters by checking the "enable" checkbox to the right of the parameter description (this enables them for polling).
   * Sound Object Position X
   * Sound Object Position Y
