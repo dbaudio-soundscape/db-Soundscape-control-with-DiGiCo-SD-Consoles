@@ -89,7 +89,7 @@ OSC documentation of the DS100 which is available for download from the related 
 ### Set up Generic OSC and connect with DS100:
 * On the Master screen, select “Setup” and go to “External Control”.
 
-<img src="Resources/Documentation/Images/01.png" alt="DiGiCo Master Screen" width="50%">
+<img src="Resources/Documentation/Images/01.PNG" alt="DiGiCo Master Screen" width="50%">
 
 ### Switch on Generic OSC and select the correct mode for d&b Soundscape control
 * Switch Enable External Control to “YES”.
@@ -97,7 +97,7 @@ OSC documentation of the DS100 which is available for download from the related 
 * Switch on “Suppress OSC retransmit” to not have the Console reply to every incoming OSC message 
 * Switch on “Recall with session” if loading a session shall trigger sending all parameters as OSC messages initially
 
-<img src="Resources/Documentation/Images/02.png" alt="DiGiCo External Control" width="50%">
+<img src="Resources/Documentation/Images/02.PNG" alt="DiGiCo External Control" width="50%">
 
 ### Enter the parameters to establish the connection with the DS100:
 Ensure the DS100 is connected to the same Ethernet network as your Console and their IP addresses and subnet masks are compatible.
@@ -109,17 +109,17 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
- <img src="Resources/Documentation/Images/03.png" alt="DiGiCo External Control Detail" width="30%">
+ <img src="Resources/Documentation/Images/03.PNG" alt="DiGiCo External Control Detail" width="30%">
 
 ### Assign the OSC commands to the rotaries and switches of the External Control window according to how they should control the d&b Soundscape parameters:
 * Click the ”Costumise” button to display an assignment list for 8 rotaries.
 * Assign the parameters of En-Scene and En-Space to the rotaries by entering the OSC commands and values in the OSC column.
 
-<img src="Resources/Documentation/Images/04.png" alt="DiGiCo OSC Cmd Assign" width="30%">
+<img src="Resources/Documentation/Images/04.PNG" alt="DiGiCo OSC Cmd Assign" width="30%">
 
 The above entries result in the following assignment in the External Control window:
 
-<img src="Resources/Documentation/Images/05.png" alt="DiGiCo External Control Assign" width="40%">
+<img src="Resources/Documentation/Images/05.PNG" alt="DiGiCo External Control Assign" width="40%">
 
 ### Comments:
 **Asterix sign:** the /* at the end of the OSC string is replaced by the channel number and refers to the DS100 input channel with the same number. Referring to a channel number which is different from the console’s input channel is not possible (console channel 1 always controls DS100 input channel 1 and console channel 2 controls DS100 input channel 2, etc...).
@@ -136,12 +136,12 @@ The OSC strings for the control of further parameters can be found in the OSC do
 * Open the Channel Out window by clicking the bottom section of the channel strip.
 * Switch on External Control and click View.
 
-<img src="Resources/Documentation/Images/06.png" alt="DiGiCo Channelstrip ext ctl enable" width="50%">
+<img src="Resources/Documentation/Images/06.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="50%">
 
 #### External Control window:
 When the External Control window is displayed, the parameters can be changed using the hardware encoders.
 
-<img src="Resources/Documentation/Images/07.png" alt="DiGiCo Channelstrip ext ctl enable" width="50%">
+<img src="Resources/Documentation/Images/07.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="50%">
 
 
 <a name="setupDigicoWithPollingBridge" />

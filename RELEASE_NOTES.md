@@ -6,6 +6,12 @@ Copyright (C) 2017-2021, d&b audiotechnik GmbH & Co. KG
 * "Bugfixes" are newly fixed bugs with the corresponding release
 * "Know issues" are issues (inconveniences or bugs) known to exist in the corresponding release
 
+## V0.4.8
+
+### Features
+
+* New object handling modes to allow selection of value forwarding from either of two Role A protocols to Role B protocols
+
 ## V0.4.5
 
 ### Features

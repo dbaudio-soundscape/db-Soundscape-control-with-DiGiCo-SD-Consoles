@@ -748,6 +748,10 @@ ObjectHandlingConfigWindow::ObjectHandlingConfigWindow(const String &name, Colou
 	case ObjectHandlingMode::OHM_Mux_nA_to_mB:
 		m_configComponent = std::make_unique<OHMultiplexAtoBConfigComponent>(mode);
 		break;
+	case ObjectHandlingMode::OHM_A1active_withValFilter:
+		// intentionally no break to run into Forward_only_valueChanges
+	case ObjectHandlingMode::OHM_A2active_withValFilter:
+		// intentionally no break to run into Forward_only_valueChanges
 	case ObjectHandlingMode::OHM_Forward_only_valueChanges:
 		m_configComponent = std::make_unique<OHForwardOnlyValueChangesConfigComponent>(mode);
 		break;
