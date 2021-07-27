@@ -75,6 +75,8 @@ NodeComponent::NodeComponent(NodeId NId)
 	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Forward_A_to_B_only), OHM_Forward_A_to_B_only);
 	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Reverse_B_to_A_only), OHM_Reverse_B_to_A_only);
 	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_Mux_nA_to_mB_withValFilter), OHM_Mux_nA_to_mB_withValFilter);
+	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_A1active_withValFilter), OHM_A1active_withValFilter);
+	m_NodeModeDrop->addItem(ProcessingEngineConfig::ObjectHandlingModeToString(OHM_A2active_withValFilter), OHM_A2active_withValFilter);
 	m_NodeModeDrop->setColour(Label::textColourId, Colours::white);
 	m_NodeModeDrop->setJustificationType(Justification::right);
 
@@ -145,23 +147,15 @@ void NodeComponent::resized()
  */
 void NodeComponent::childWindowCloseTriggered(DialogWindow* childWindow)
 {
-	ProcessingEngineConfig* config = GetConfig();
-	ProcessingEngine* engine = GetEngine();
-
-	if (childWindow == m_OHMConfigDialog.get())
+	if (m_OHMConfigDialog && childWindow == m_OHMConfigDialog.get())
 	{
-		if (config && engine)
+		ProcessingEngineConfig* config = GetConfig();
+		if (config)
 		{
-			bool EngineIsRunning = engine->IsRunning();
-			if (EngineIsRunning)
-				engine->Stop();
-
 			m_OHMConfigDialog->DumpConfig(*config);
 			config->WriteConfiguration();
-			engine->SetConfig(*config);
 
-			if (EngineIsRunning)
-				engine->Start();
+			RefreshEngine();
 		}
 
 		if (m_OHMConfigDialog != 0 && m_OHMConfigEditButton)
@@ -181,8 +175,10 @@ void NodeComponent::childWindowCloseTriggered(DialogWindow* childWindow)
  */
 void NodeComponent::DumpUItoConfig(ProcessingEngineConfig& config)
 {
-	m_protocolsAComponent->DumpUItoConfig(config);
-	m_protocolsBComponent->DumpUItoConfig(config);
+	if (m_protocolsAComponent)
+		m_protocolsAComponent->DumpUItoConfig(config);
+	if (m_protocolsBComponent)
+		m_protocolsBComponent->DumpUItoConfig(config);
     
     // get the mode the node should run in from ui
     ObjectHandlingMode ohMode = OHM_Invalid;
@@ -207,11 +203,14 @@ int NodeComponent::RefreshUIfromConfig(const ProcessingEngineConfig& config)
 
 	int requiredHeight = 0;
     
-	requiredHeight += m_protocolsAComponent->RefreshUIfromConfig(m_NodeId, node.RoleAProtocols, config);
-	requiredHeight += m_protocolsBComponent->RefreshUIfromConfig(m_NodeId, node.RoleBProtocols, config);
+	if (m_protocolsAComponent)
+		requiredHeight += m_protocolsAComponent->RefreshUIfromConfig(m_NodeId, node.RoleAProtocols, config);
+	if (m_protocolsBComponent)
+		requiredHeight += m_protocolsBComponent->RefreshUIfromConfig(m_NodeId, node.RoleBProtocols, config);
 	requiredHeight += UIS_Margin_s;
 
-    m_NodeModeDrop->setSelectedId(node.ObjectHandling.Mode, dontSendNotification);
+	if (m_NodeModeDrop)
+		m_NodeModeDrop->setSelectedId(node.ObjectHandling.Mode, dontSendNotification);
 	requiredHeight += UIS_ElmSize + UIS_Margin_m;
 
 	return requiredHeight;
@@ -298,6 +297,8 @@ void NodeComponent::comboBoxChanged(ComboBox* comboBox)
 	ignoreUnused(comboBox);
 
 	TriggerParentConfigDump();
+
+	RefreshEngine();
 }
 
 /**
@@ -309,8 +310,6 @@ void NodeComponent::comboBoxChanged(ComboBox* comboBox)
 void NodeComponent::textEditorTextChanged(TextEditor& textEdit)
 {
 	ignoreUnused(textEdit);
-
-	TriggerParentConfigDump();
 }
 
 /**
@@ -324,6 +323,8 @@ void NodeComponent::textEditorReturnKeyPressed(TextEditor& textEdit)
 	ignoreUnused(textEdit);
 
 	TriggerParentConfigDump();
+
+	RefreshEngine();
 }
 
 /**
@@ -335,6 +336,8 @@ void NodeComponent::textEditorReturnKeyPressed(TextEditor& textEdit)
 void NodeComponent::textEditorEscapeKeyPressed(TextEditor& textEdit)
 {
 	ignoreUnused(textEdit);
+
+	TriggerParentConfigRefresh();
 }
 
 /**
@@ -346,6 +349,10 @@ void NodeComponent::textEditorEscapeKeyPressed(TextEditor& textEdit)
 void NodeComponent::textEditorFocusLost(TextEditor& textEdit)
 {
 	ignoreUnused(textEdit);
+
+	TriggerParentConfigDump();
+
+	RefreshEngine();
 }
 
 /**
@@ -367,6 +374,35 @@ void NodeComponent::TriggerParentConfigRefresh()
 }
 
 /**
+ * Helper method to refresh the processing engine with current config
+ * and restart it if it was running.
+ * @return	True if engine was successfully refreshed and restarted (if required)
+ */
+bool NodeComponent::RefreshEngine()
+{
+	bool retVal = true;
+
+	ProcessingEngine* engine = GetEngine();
+	ProcessingEngineConfig* config = GetConfig();
+
+	if (engine && config)
+	{
+		bool engineIsRunning = engine->IsRunning();
+		if (engineIsRunning)
+			engine->Stop();
+
+		engine->SetConfig(*config);
+
+		if (engineIsRunning)
+			retVal = retVal && engine->Start();
+	}
+	else
+		retVal = false;
+
+	return retVal;
+}
+
+/**
  * Helper method to be called by child protocolgroupcomponent for adding a new default protocol.
  * Detecting if new protocol shall be added as A or B type is done through comparing the sender
  * object pointer to internally kept member objects.
@@ -385,58 +421,42 @@ bool NodeComponent::AddDefaultProtocol(const ProtocolGroupComponent* targetPGC)
 }
 
 /**
- *
+ * Method to add a default protocol A to config and reload the processing engine.
+ * @return	True if updating config and reloading engine was successful.
  */
 bool NodeComponent::AddDefaultProtocolA()
 {
-	ProcessingEngine* engine = GetEngine();
 	ProcessingEngineConfig* config = GetConfig();
 
-	if (engine && config)
+	if (config)
 	{
-		bool EngineIsRunning = engine->IsRunning();
-		if (EngineIsRunning)
-			engine->Stop();
-
 		config->AddDefaultProtocolA(m_NodeId);
 		config->WriteConfiguration();
-		engine->SetConfig(*config);
 
 		TriggerParentConfigRefresh();
 
-		if (EngineIsRunning)
-			engine->Start();
-
-		return true;
+		return RefreshEngine();
 	}
 	else
 		return false;
 }
 
 /**
- *
+ * Method to add a default protocol B to config and reload the processing engine.
+ * @return	True if updating config and reloading engine was successful.
  */
 bool NodeComponent::AddDefaultProtocolB()
 {
-	ProcessingEngine* engine = GetEngine();
 	ProcessingEngineConfig* config = GetConfig();
 
-	if (engine && config)
+	if (config)
 	{
-		bool EngineIsRunning = engine->IsRunning();
-		if (EngineIsRunning)
-			engine->Stop();
-
 		config->AddDefaultProtocolB(m_NodeId);
 		config->WriteConfiguration();
-		engine->SetConfig(*config);
 
 		TriggerParentConfigRefresh();
 
-		if (EngineIsRunning)
-			engine->Start();
-
-		return true;
+		return RefreshEngine();
 	}
 	else
 		return false;
@@ -451,25 +471,16 @@ bool NodeComponent::AddDefaultProtocolB()
  */
 bool NodeComponent::RemoveProtocol(const NodeId& NId, const ProtocolId& PId)
 {
-	ProcessingEngine* engine = GetEngine();
 	ProcessingEngineConfig* config = GetConfig();
 
-	if (engine && config)
+	if (config)
 	{
-		bool EngineIsRunning = engine->IsRunning();
-		if (EngineIsRunning)
-			engine->Stop();
-
 		config->RemoveProtocol(NId, PId);
 		config->WriteConfiguration();
-		engine->SetConfig(*config);
 
 		TriggerParentConfigRefresh();
 
-		if (EngineIsRunning)
-			engine->Start();
-
-		return true;
+		return RefreshEngine();
 	}
 	else
 		return false;
@@ -487,24 +498,17 @@ void NodeComponent::ToggleOpenCloseObjectHandlingConfig(Button* button)
 		return;
 
 	ProcessingEngineConfig* config = m_parentComponent->GetConfig();
-	ProcessingEngine* engine = m_parentComponent->GetEngine();
 
 	// if the config dialog exists, this is a uncheck (close) click,
 	// which means we have to process edited data
 	if (m_OHMConfigDialog)
 	{
-		if (config && engine)
+		if (config)
 		{
-			bool EngineIsRunning = engine->IsRunning();
-			if (EngineIsRunning)
-				engine->Stop();
-
 			m_OHMConfigDialog->DumpConfig(*config);
 			config->WriteConfiguration();
-			engine->SetConfig(*config);
 
-			if (EngineIsRunning)
-				engine->Start();
+			RefreshEngine();
 		}
 
 		button->setColour(TextButton::buttonColourId, Colours::dimgrey);
@@ -515,7 +519,7 @@ void NodeComponent::ToggleOpenCloseObjectHandlingConfig(Button* button)
 	// otherwise we have to create the dialog and show it
 	else
 	{
-		if (config && engine)
+		if (config)
 		{
 			ObjectHandlingMode ohMode = config->GetObjectHandlingData(m_NodeId).Mode;
 

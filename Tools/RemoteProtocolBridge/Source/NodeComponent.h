@@ -72,6 +72,7 @@ public:
 	void ToggleOpenCloseObjectHandlingConfig(Button* button);
 	void TriggerParentConfigDump();
 	void TriggerParentConfigRefresh();
+	bool RefreshEngine();
 
 	//==============================================================================
 	bool AddDefaultProtocol(const ProtocolGroupComponent* targetPGC);

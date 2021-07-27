@@ -78,6 +78,13 @@ MainRemoteProtocolBridgeComponent::MainRemoteProtocolBridgeComponent()
 		RemoveDownImage, 1.0, Colours::transparentBlack);
 
 	/******************************************************/
+	String nameAndVersionString = JUCEApplication::getInstance()->getApplicationName() + String(" v") + String(JUCE_STRINGIFY(JUCE_APP_VERSION));
+	m_NameAndVersionLabel = std::make_unique<Label>();
+	addAndMakeVisible(m_NameAndVersionLabel.get());
+	m_NameAndVersionLabel->setText(nameAndVersionString, dontSendNotification);
+	m_NameAndVersionLabel->setJustificationType(juce::Justification::centredLeft);
+
+	/******************************************************/
 	m_TriggerOpenConfigButton = std::make_unique<TextButton>();
 	m_TriggerOpenConfigButton->addListener(this);
 	addAndMakeVisible(m_TriggerOpenConfigButton.get());
@@ -262,8 +269,13 @@ void MainRemoteProtocolBridgeComponent::resized()
 	if (m_EngineStartStopButton)
 		m_EngineStartStopButton->setBounds(windowWidth - 80, yPositionConfTrafButtons, UIS_ButtonWidth, UIS_ElmSize);
 
+	/*Name/Version Label*/
+	int yPositionVersionLabel = yPositionConfTrafButtons - UIS_ElmSize;
+	if (m_NameAndVersionLabel)
+		m_NameAndVersionLabel->setBounds(UIS_Margin_s, yPositionVersionLabel, windowWidth - 60, UIS_ElmSize - UIS_Margin_s);
+
 	/*Add/Remove Buttons*/
-	int yPositionAddRemButts = yPositionConfTrafButtons - UIS_ElmSize;
+	int yPositionAddRemButts = yPositionVersionLabel;
 	if (m_AddNodeButton)
 		m_AddNodeButton->setBounds(windowWidth - 25, yPositionAddRemButts, UIS_ElmSize - UIS_Margin_s, UIS_ElmSize - UIS_Margin_s);
 	if (m_RemoveNodeButton)

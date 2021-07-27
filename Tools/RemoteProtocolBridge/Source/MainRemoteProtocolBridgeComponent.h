@@ -80,6 +80,8 @@ private:
 	std::unique_ptr<ImageButton>						m_AddNodeButton;			/**< Button to add a node. */
 	std::unique_ptr<ImageButton>						m_RemoveNodeButton;			/**< Button to remove a node. */
 
+	std::unique_ptr<Label>								m_NameAndVersionLabel;		/**< Label to show minimal app name and version info. */
+
 	std::unique_ptr<TextButton>							m_TriggerOpenConfigButton;	/**< Button to trigger opening configuration. */
 	std::unique_ptr<TextButton>							m_TriggerOpenLoggingButton;	/**< Button to trigger opening logging. */
 	std::unique_ptr<TextButton>							m_EngineStartStopButton;	/**< Button to toggle engine start/stop. */
