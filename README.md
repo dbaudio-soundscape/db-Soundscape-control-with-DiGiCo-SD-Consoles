@@ -117,7 +117,7 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 #### **Channel surface:**
 * Open the Channel Outputs window by clicking the bottom section of the channel strip.
 * Switch on d&b Control and click View.
-* Instead of regular lcr pan control, the d&b Soundscape two dimensional panner is now visible in the channelstrip
+* Instead of regular lcr pan control, the d&b Soundscape two-dimensional panner is now visible in the channelstrip
 
 <img src="Resources/Documentation/Screenshots/04.png" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
