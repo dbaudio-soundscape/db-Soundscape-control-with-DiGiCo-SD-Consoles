@@ -17,10 +17,9 @@ By downloading software from this site, you agree to the terms and conditions de
 * [Requirements](#requirements)
 * [Setting up d&b Soundscape channel control](#setupDigico)
 * [Enabling bidirectional communication for d&b Soundscape channel control using the d&b Software bridge](#setupDigicoWithPollingBridge)
-  * [128 channel DS100 cascading](#128chCascade)
-  * [dual DS100 parallel](#dualDS100parallel)
+  * [Dual DS100 for 128 channels](#128chCascade)
+  * [Dual DS100 parallel](#dualDS100parallel)
 * [Additional functionality](#additionalFunctionality)
-* [Known issues](#knownIssues)
 
 
 <a name="introduction" />
@@ -50,7 +49,7 @@ www.dbaudio.com and www.dbsoundscape.com.
 ## **Features**
 
 ### **Generic OSC functionality with d&b Soundscape**
-Control of the following d&b Soundscape parameters of the desired sound objects via the the console's channel strips 01-64.
+Control of the following d&b Soundscape parameters of the desired sound objects via the the console's channel strips.
 
 To handle these parameters, they can also be stored and recalled using the scene memory of the console.
 
@@ -123,13 +122,13 @@ Tap the “add device” button and select “other OSC” from the drop-down li
 
 #### **External Control window:**
 * Right-click on the d&b Soundscape control in the channelstrip to bring up the d&b Soundscape window, containing from left to right:
-  * xy Sound Object position fader
+  * Sound Object xy position
   * Sound Object x position rotary
   * Sound Object y position rotary
   * Sound Object Spread factor rotary
   * Sound Object EnSpace send gain rotary
   * Sound Object delay mode toggle buttons
-* These values can be controlled by hardware knobs and buttons
+* These values can be controlled by hardware knobs and buttons. The xy values can also be controlled through the console touchscreen.
 * Right-click on the xy Sound Object position fader to open an enlarged version of the xy position fader combined with spread, delay mode and EnSpace send gain visualization
 * Click on the Object Number button on the right side of the enlarged xy Sound Object position fader window to bring up the Object Number assignment window and choose the Sound Object number, the channelstrip shall control.
 * Click on the Mapping button on the right side of the enlarged xy Sound Object position fader window to bring up the Mapping Area assignment window and choose the mapping area that shall be targeted by the d&b Soundscape control of the channelstrip.
@@ -162,12 +161,12 @@ Ensure the Console, the PC running the Software bridge and the DS100 are connect
 * Click the “add device” button, select “other OSC” from the drop-down list and enter the values to establish the connection:
 * Enter a name of your choice.
 * Enter the IP address of the PC running the Software bridge.
-* Enter the Send port to use for the connection to the Software bridge (do not use the same port as used by the DS100, e.g. 50012).
-* Enter the Receive port to use for the connection to the Software bridge (do not use the same port as used by the DS100, e.g. 50013).
+* Enter the Send port to use for the connection to the Software bridge (do not use the same port as used by the DS100, e.g. 50013).
+* Enter the Receive port to use for the connection to the Software bridge (do not use the same port as used by the DS100, e.g. 50012).
 * Press the “OK”/ return key.
 * Click the red cross in the Enabled column to the right of your entries (a green check mark will appear instead).
 
-<img src="Resources/Documentation/Screenshots/03.PNG" alt="Digico Ext Ctl via RPB" width="500px">
+<img src="Resources/Documentation/Screenshots/03-1.PNG" alt="Digico Ext Ctl via RPB" width="500px">
 
  ### **Parameters to establish the connection of the Software bridge with the console and the DS100:**
  Ensure the console, the PC running the Software bridge and the DS100 are connected to the same Ethernet network and their IP addresses and subnet masks are compatible.
@@ -195,9 +194,11 @@ Ensure the Console, the PC running the Software bridge and the DS100 are connect
 **Role B** for the connection with the Console:
 * Enter the IP address of the console in the text field.
 * Open the "OSC protocol configuration" communication settings window by clicking the "Configuration" button for the Role B protocol. 
-* Enter the Listening port and the Receive port as used when setting up the console (e.g. as suggested above 50012 and 50013).
+* Enter the Listening port and the Receive port as used when setting up the console (e.g. as suggested above 50013 and 50012).
 * DO NOT enable any objects for polling by clicking the "enable" check mark.
 * Finish the configuration of the connection with the Console by clicking the OK button in the General configuration window.
+
+<img src="Resources/Documentation/Screenshots/07-1.PNG" alt="RPB Protocol Cfg" width="400px">
 
 
 **Note:** The Software bridge can only handle the following d&b Soundscape object parameters:
@@ -287,16 +288,3 @@ For this reason, only use this function for troubleshooting not for normal opera
 
 <img src="Resources/Documentation/Screenshots/10.PNG" alt="RPB Traffic" width="600px">
 
-
-<a name="knownIssues" />
-
-## **Known issues**
-
-### **Delay mode:**
-The three available delay modes of En-Scene correspond to the integer values 0-2.
-
-Generic OSC sends and receives float values.
-
-This means that when using the bridge for this parameter, the value of the console knob cannot be changed reliably. 
-
-Possible workaround: If you can restrict yourself to two values for the delay mode, use a switch control instead of a rotary.
