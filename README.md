@@ -243,12 +243,3 @@ For this reason, only use this function for troubleshooting not for normal opera
 <a name="knownIssues" />
 
 ## Known issues
-
-### Delay mode:
-The three available delay modes of En-Scene correspond to the integer values 0-2.
-
-Generic OSC sends and receives float values.
-
-This means that when using the bridge for this parameter, the value of the console knob cannot be changed reliably. 
-
-Possible workaround: If you can restrict yourself to two values for the delay mode, use a switch control instead of a rotary.
