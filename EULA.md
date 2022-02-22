@@ -1,4 +1,4 @@
-# End-User License Agreement (“Agreement”) for d&b Soundscape DAW Plug-in (“Software”)
+# End-User License Agreement (“Agreement”) for DiGiCo console control for d&b Soundscape (“Software”)
 
 This is a legal Agreement between the end user (“you”) and d&b audiotechnik GmbH & Co. KG, Eugen-Adolff-Strasse 134, 71522 Backnang, Germany (“d&b audiotechnik”). 
 
