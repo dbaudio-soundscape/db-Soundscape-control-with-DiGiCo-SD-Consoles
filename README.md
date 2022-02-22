@@ -94,7 +94,7 @@ On the Master screen, select “Setup” and go to “External Control”.
 * Switch on “Recall with session” if loading a session shall trigger the console to send all OSC messages initially.
 * Select add **device > other osc**
 
-<img src="Resources/Documentation/Screenshots/03.PNG" alt="DiGiCo External Control" width="500px">
+<img src="Resources/Documentation/Screenshots/02.PNG" alt="DiGiCo External Control" width="500px">
 
 ### **Parameters to establish the connection with the DS100**
 * Enter a name of your choice.
@@ -113,7 +113,7 @@ On any Input or Group channel strip
 * Switch on d&b Control and click View.
 * Returning to a standard Input channel strip view, you will see that the standard panner has changed appearance to show the new d&b Soundscape controls.
 
-<img src="Resources/Documentation/Screenshots/04.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
+<img src="Resources/Documentation/Screenshots/03.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
 #### **External Control window**
 * Touch the new control in the channel strip to bring up an expanded view of the d&b Soundscape control which allows the parameters to be adjusted with the switches and rotary encoders under the touch screen.
@@ -129,7 +129,7 @@ On any Input or Group channel strip
   * Click on the Mapping button to select which mapping area shall be targeted from the channel strip's controls.
 
 
-<img src="Resources/Documentation/Screenshots/05.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
+<img src="Resources/Documentation/Screenshots/04.PNG" alt="DiGiCo Channelstrip ext ctl enable" width="500px">
 
 
 <a name="setupDigicoWithPollingBridge" />
@@ -165,7 +165,7 @@ Click the “add device” button, select “other OSC” from the drop-down lis
 Click the red cross in the Enabled column to the right of 
 your entries (a green check mark will appear instead).
 
-<img src="Resources/Documentation/Screenshots/03-1.PNG" alt="Digico Ext Ctl via RPB" width="500px">
+<img src="Resources/Documentation/Screenshots/05.PNG" alt="Digico Ext Ctl via RPB" width="500px">
 
  ### **RemoteProtocolBridge parameters to establish the connection from the console to the DS100**
 Ensure the console, the computer running RemoteProtocolBridge and the DS100 are connected to the same Ethernet network and their IP addresses and subnet masks are compatible.
@@ -211,7 +211,7 @@ configuration window.
 * Enter the Listening and Remote ports as used when setting up the console, e.g. 50012 and 50013 as suggested above. Do not use the ports assigned to the DS100.
 * **DO NOT** enable any objects for polling.
 
-<img src="Resources/Documentation/Screenshots/07-1.PNG" alt="RPB Protocol Cfg" width="400px">
+<img src="Resources/Documentation/Screenshots/08.PNG" alt="RPB Protocol Cfg" width="400px">
 
 
 ### **Sound object data Handling**
@@ -219,8 +219,8 @@ Select 'Forward value changes only' from the Data handling drop-down This determ
 
 Click the 'Configuration' button in the Data handling section to set the value change detection threshold to '0.001' as shown below.
 
-<img src="Resources/Documentation/Screenshots/08.PNG" alt="RPB Engine ON" width="500px">
-<img src="Resources/Documentation/Screenshots/09.PNG" alt="RPB Value Change Prec" width="350px">
+<img src="Resources/Documentation/Screenshots/09.PNG" alt="RPB Engine ON" width="500px">
+<img src="Resources/Documentation/Screenshots/10.PNG" alt="RPB Value Change Prec" width="350px">
 
 Start the bridge functionality by clicking “Start Engine”.
 
@@ -308,8 +308,8 @@ requires switching from one to the other DS100, select
 'A2 forwarding only (val. changes only)' while
 RemoteProtocolBridge is running.
 
-<img src="Resources/Documentation/Screenshots/14.PNG" alt="RPB Engine ON" width="500px">
-<img src="Resources/Documentation/Screenshots/15.PNG" alt="RPB Engine ON" width="400px">
+<img src="Resources/Documentation/Screenshots/13.PNG" alt="RPB Engine ON" width="500px">
+<img src="Resources/Documentation/Screenshots/14.PNG" alt="RPB Engine ON" width="400px">
 
 
 <a name="additionalFunctionality" />
