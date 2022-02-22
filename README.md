@@ -12,20 +12,20 @@ By downloading software from this site, you agree to the terms and conditions de
 
 ## **Table of contents**
 
-* [Introduction](#introduction)
-* [Features](#features)
-* [Requirements](#requirements)
-* [Setting up DiGiCo console control for d&b Soundscape (stand alone)](#setupDigico)
-* [Enabling bidirectional communication for d&b Soundscape channel control using RemoteProtocolBridge](#setupDigicoWithPollingBridge)
-* [Advanced Functions](#advancedFunctions)
+* [1. Introduction](#introduction)
+* [2. Features](#features)
+* [3. Requirements](#requirements)
+* [4. Setting up DiGiCo console control for d&b Soundscape (stand alone)](#setupDigico)
+* [5. Enabling bidirectional communication for d&b Soundscape channel control using RemoteProtocolBridge](#setupDigicoWithPollingBridge)
+* [6. Advanced Functions](#advancedFunctions)
   * [Using 128 console channels to control two DS100s](#128chCascade)
   * [Using manual failover with two DS100](#dualDS100parallel)
-* [Additional functionality](#additionalFunctionality)
+* [7. Additional functionality](#additionalFunctionality)
 
 
 <a name="introduction" />
 
-## **Introduction**
+## **1. Introduction**
 
 d&b Soundscape integration for all DiGiCo SD and Quantum consoles can be achieved with a dedicated d&b Soundscape interface and the RemoteProtocolBridge software for optional bidirectional communication 
 provided by d&b.
@@ -41,7 +41,7 @@ More information about DiGiCo consoles and the OSC implementation is provided on
 
 <a name="features" />
 
-## **Features**
+## **2. Features**
 
 ### **Parameters controllable by the DiGiCo console integration**
 * En-Scene X & Y position (absolute or relative to a coordinate mapping)
@@ -68,7 +68,7 @@ console's touch screen
 
 <a name="requirements" />
 
-## **Requirements**
+## **3. Requirements**
 
 * A DiGiCo SDxx or Quantum console with software application V1528 or higher.
 * A d&b DS100 Signal Engine with active En-Scene and / or En-Space license. It is recommended to use thelatest firmware available (please check online using theService view in the d&b R1 software).
@@ -80,7 +80,7 @@ console's touch screen
 
 <a name="setupDigico" />
 
-## **Setting up DiGiCo console control for d&b Soundscape (stand alone)**
+## **4. Setting up DiGiCo console control for d&b Soundscape (stand alone)**
 
 ### **Setting up d&b Soundscape channel control on a DiGiCo SD-series console**
 
@@ -134,7 +134,7 @@ On any Input or Group channel strip
 
 <a name="setupDigicoWithPollingBridge" />
 
-## **Enabling bidirectional communication for d&b Soundscape channel control using RemoteProtocolBridge**
+## **5. Enabling bidirectional communication for d&b Soundscape channel control using RemoteProtocolBridge**
 
 ### **General**
 The OSC protocol specification does not define how valuechanges in a controlled device are kept in sync with what an external controller displays.
@@ -147,7 +147,7 @@ Therefore, the setup within the console is different than in stand-alone operati
 
 This provides a workflow in which d&b Soundscape can be operated by a console, the d&b R1 Remote control software and other controllers simultaneously with the console always displaying the current parameter values ofthe DS100.
 
-## **Different data-flow for bidirectional communication with RemoteProtocolBridge**
+### **Different data-flow for bidirectional communication with RemoteProtocolBridge**
 When using RemoteProtocolBridge, the console does not communicate with the DS100 directly anymore. Rather, the console's target is the software bridge which passes onthe console's commands to the DS100 while also polling parameter values from the DS100 and passing them back to the console.
 
 
@@ -180,14 +180,17 @@ Position, Spread, Delay Mode, En-Space Send Gain.
 ### **Connection to the DS100**
 **Role A** within RemoteProtocolBridge refers to the DS100. 
 * Enter the IP address of the DS100 in the text field. The IP address of the DS100 can be obtained from the «Info» tab in the «Device» view in R1 V3, e.g. 192.168.1.70.
+
 <img src="Resources/Documentation/Screenshots/06.PNG" alt="RPB SingleDS100" width="500px">
+
 * Click the Role A 'Configuration' button to open its OSC 
 protocol configuration settings.
 * Enter the Listening port and the Remote port.
-The Remote port is the listening port of the DS100 = 
-50010.
-The Listening port is the reply port of the DS100 = 
-50011.
+
+  The Remote port is the listening port of the DS100 = 50010.
+
+  The Listening port is the reply port of the DS100 = 50011.
+
 * Enable the following parameters for polling via the 'enable' checkboxes:
   * Sound Object Position X
   * Sound Object Position Y
@@ -226,7 +229,7 @@ Start the bridge functionality by clicking “Start Engine”.
 
 <a name="advancedFunctions" />
 
-## **Advanced functions**
+## **6. Advanced functions**
 
 <a name="128chCascade" />
 
@@ -314,7 +317,7 @@ RemoteProtocolBridge is running.
 
 <a name="additionalFunctionality" />
 
-## **Additional functionality**
+## **7. Additional functionality**
 
 ### **Protocol Traffic Logging**
 RemoteProtocolBridge can log and display the handled network traffic. This function is intended to simplify error analysis.
