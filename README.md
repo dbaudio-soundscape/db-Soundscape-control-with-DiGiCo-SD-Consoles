@@ -211,7 +211,7 @@ configuration window.
 **Role B** within RemoteProtocolBridge refers to the console.
 * Enter the IP address of the console in the first field. In this example, it's 192.168.1.108.
 * Click the Role B 'Configuration' button to open its OSC protocol configuration settings.
-* Enter the Listening and Remote ports as used when setting up the console, e.g. 50012 and 50013 as suggested above. Do not use the ports assigned to the DS100.
+* Enter the Listening and Remote ports as used when setting up the console, e.g. 50012 and 50013 as suggested below. Do not use the ports assigned to the DS100.
 * **DO NOT** enable any objects for polling.
 
 <img src="Resources/Documentation/Screenshots/08.PNG" alt="RPB Protocol Cfg" width="400px">
