@@ -44,7 +44,7 @@ More information about DiGiCo consoles and the OSC implementation is provided on
 ## **2. Features**
 
 ### **Parameters controllable by the DiGiCo console integration**
-* En-Scene X & Y position (absolute or relative to a coordinate mapping)
+* En-Scene X & Y position (relative to a coordinate mapping)
 * En-Scene Spread
 * En-Scene Delay mode
 * En-Space (reverb) send level
