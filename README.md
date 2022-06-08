@@ -77,6 +77,13 @@ console's touch screen
 * For bidirectional communication / workflow: Win or mac OS computer running RemoteProtocolBridge. This computer must be connected to the same network.On Windows operating systems, RemoteProtocolBridge requires installing the Visual C++ Redistributable Packages for Visual Studio 2017. For further details, see https://go.microsoft.com/fwlink/?LinkId=746572.
 * Please note that when using RemoteProtocolBridge, no other OSC application should be run simultaneously on the same machine. As all OSC applications access the same port, this would lead to conflicts.
 
+### **Important Note for users of DiGiCo consoles with "T" (Theatre) software and "Auto update" enabled**
+"Auto update" causes a lot of extra traffic through Remote Protocol Bridge because of its parameter polling.
+
+When firing snapshots in quick succession, such as during a technical production run-through, this might cause forwarding delays in Remote Protocol Bridge. As a result, values which have been polled by a previous snapshot might be returned to the console while another snapshot is already active, thus updating the current snapshot with potentially unintended data.
+
+For this reason, and until a technical solution can be devised, we advise to keep a minimum interval of at least 2 seconds between firing snapshots in such scenarios.
+
 
 <a name="setupDigico" />
 
