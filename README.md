@@ -4,7 +4,7 @@ Copyright (C) 2017-2022, d&b audiotechnik GmbH & Co. KG
 
 By downloading software from this site, you agree to the terms and conditions described in the [End-User License Agreement](EULA.md). If you do not agree with such terms and conditions do not download the software.
 
-## Latest binaries can be downloaded here: [LATEST RELEASE](../../releases/latest)
+## This Repository is no longer maintained. The functionality of the RemoteProtocolBridge tool is now included in the d&b En-Bridge tool, which is available for download at https://www.dbsoundscape.com
 
 ---
 
